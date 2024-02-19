@@ -1,4 +1,5 @@
 import cv2
+from cv2.typing import MatLike
 from A1_A8 import A1_A8
 from PyQt5.QtWidgets import *   # type: ignore
 from PyQt5.QtCore import pyqtSlot
@@ -11,15 +12,11 @@ class TransformasiDialog(QDialog):
     def __init__(self):
         super(TransformasiDialog, self).__init__()
         self.setWindowTitle('Transformasi')
-        self.input: list[QWidget] = []
         self.setLayout(QFormLayout())
 
     def addWidget(self, widget: QWidget, label=None):
-        if label:
-            self.layout().addWidget(QLabel(label))
-
+        if label: self.layout().addWidget(QLabel(label))
         self.layout().addWidget(widget)
-        self.input.append(widget)
 
     def exec(self):
         self.ok = QPushButton("OK")
@@ -31,15 +28,6 @@ class TransformasiDialog(QDialog):
 
         return super().exec()
 
-    def getValues(self):
-        values = list(map(lambda w: w.text(), self.input))
-
-        if '' in values:
-            QMessageBox(Critical, 'Error', 'Input ada yang kosong!').exec()
-            return []
-
-        return values
-
 class A9_C2(A1_A8):
     def __init__(self):
         super(A9_C2, self).__init__()
@@ -47,10 +35,12 @@ class A9_C2(A1_A8):
         self.swapButton: QPushButton
         self.hgMenu: QMenu
         self.tfMenu: QMenu
+        self.o2cMenu: QMenu
 
         self.swapButton.clicked.connect(self.swapImages)    # type: ignore
         self.hgMenu.triggered.connect(self.hgTrigger)       # type: ignore
         self.tfMenu.triggered.connect(self.tfTrigger)       # type: ignore
+        self.o2cMenu.triggered.connect(self.o2cTrigger)     # type: ignore
 
     @pyqtSlot()
     def swapImages(self):
@@ -89,6 +79,40 @@ class A9_C2(A1_A8):
         }
 
         mapped.get(menuText)()      # type: ignore
+
+    @pyqtSlot(QAction)
+    def o2cTrigger(self, action: QAction):
+        if not hasattr(self, 'imageOriginal'):
+            return QMessageBox(Critical, 'Error', 'Citra masih kosong!').exec()
+
+        menuText = action.text()
+        file1 = self.originalLabel.toolTip()
+        file2, _ = QFileDialog().getOpenFileName(
+            filter='Citra (*.png *.jpeg *.jpg *.bmp)')
+
+        if not file2: return
+
+        image1: MatLike
+        image2: MatLike
+
+        if menuText in ['Add', 'Subtract']:
+            image1 = cv2.imread(file1, 0)
+            image2 = cv2.imread(file2, 0)
+        else:
+            image1 = cv2.imread(file1, 0)
+            image2 = cv2.imread(file2, 1)
+            image1 = cv2.cvtColor(image1, cv2.COLOR_BGR2RGB)
+            image2 = cv2.cvtColor(image2, cv2.COLOR_BGR2RGB)
+
+        mapped = {
+            'Add': image1 + image2,         # type: ignore
+            'Subtract': image1 - image2,    # type: ignore
+            'AND': cv2.bitwise_and(image1, image2),
+            'OR': cv2.bitwise_or(image1, image2),
+        }
+
+        self.imageResult = mapped.get(menuText)     # type: ignore
+        self.displayImage(2)
 
     def __grayscale(self):
         plt.hist(self.imageOriginal.ravel(), 255, (0, 255))
@@ -132,7 +156,8 @@ class A9_C2(A1_A8):
 
         if dialog.exec() == QDialog.Rejected: return
 
-        X, Y = list(map(float, dialog.getValues())) or [1, 1]
+        X = int(edit_x.text()) or 1
+        Y = int(edit_y.text()) or 1
         H, W = self.imageOriginal.shape[:2]
         H2, W2 = H / X, W / Y
         T = np.array([[1, 0, H2], [0, 1, W2]])
@@ -171,7 +196,8 @@ class A9_C2(A1_A8):
 
         if dialog.exec() == QDialog.Rejected: return
 
-        fx, fy = list(map(float, dialog.getValues())) or [1, 1]
+        fx = int(edit_x.text()) or 1
+        fy = int(edit_y.text()) or 1
 
         try:
             self.imageResult = cv2.resize(self.imageOriginal, None, None,

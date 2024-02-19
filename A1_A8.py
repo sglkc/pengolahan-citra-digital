@@ -21,11 +21,11 @@ class A1_A8(QMainWindow):
         self.resultLabel: QLabel
         self.loadButton: QPushButton
         self.resultButton: QPushButton
-        self.comboBox: QComboBox
+        self.filterCombo: QComboBox
         self.slider: QSlider
 
         self.loadButton.clicked.connect(self.loadClicked)
-        self.comboBox.currentTextChanged.connect(self.comboBoxChanged)
+        self.filterCombo.currentTextChanged.connect(self.filterComboChanged)
         self.resultButton.clicked.connect(self.resultClicked)
 
     @pyqtSlot()
@@ -33,11 +33,13 @@ class A1_A8(QMainWindow):
         file, _ = QFileDialog().getOpenFileName(
             filter='Citra (*.png *.jpeg *.jpg *.bmp)')
 
-        if file: self.loadImage(file)
+        if file:
+            self.loadImage(file)
+            self.originalLabel.setToolTip(file)
 
     @pyqtSlot()
-    def comboBoxChanged(self):
-        value = self.comboBox.currentText()
+    def filterComboChanged(self):
+        value = self.filterCombo.currentText()
         mapped = {
             'Grayscale': False,
             'Brightness': True,
@@ -54,7 +56,7 @@ class A1_A8(QMainWindow):
         if not hasattr(self, 'imageOriginal'):
             return QMessageBox(3, 'Error', 'Citra masih kosong!').exec()
 
-        value = self.comboBox.currentText()
+        value = self.filterCombo.currentText()
         mapped = {
             'Grayscale': self.__grayscale,
             'Brightness': self.__brightness,
