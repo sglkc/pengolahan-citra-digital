@@ -6,25 +6,34 @@ from PyQt5.QtCore import pyqtSlot
 from matplotlib import pyplot as plt
 import numpy as np
 
+# pyright: reportOptionalMemberAccess=false
 Critical = QMessageBox.Critical
 
 class TransformasiDialog(QDialog):
     def __init__(self):
         super(TransformasiDialog, self).__init__()
-        self.setWindowTitle('Transformasi')
-        self.setLayout(QFormLayout())
+        self.setWindowTitle('Pengaturan')
+        self.form = QFormLayout()
+        self.input: list[QWidget] = []
 
-    def addWidget(self, widget: QWidget, label=None):
-        if label: self.layout().addWidget(QLabel(label))
-        self.layout().addWidget(widget)
+    def addInput(self, label: str, placeholder: str):
+        edit = QLineEdit()
+        edit.setPlaceholderText(placeholder)
+        self.form.addRow(QLabel(label), edit)
+        self.input.append(edit)
+
+    def getValues(self):
+        mapped = list(map(lambda w: w.text() or w.placeholderText(), self.input))
+        return list(map(int, mapped))
 
     def exec(self):
         self.ok = QPushButton("OK")
+        self.ok.setDefault(True)
         self.ok.clicked.connect(self.accept)
         self.cancel = QPushButton("Cancel")
         self.cancel.clicked.connect(self.reject)
-        self.layout().addWidget(self.ok)
-        self.layout().addWidget(self.cancel)
+        self.form.addRow(self.cancel, self.ok)
+        self.setLayout(self.form)
 
         return super().exec()
 
@@ -35,12 +44,12 @@ class A9_C2(A1_A8):
         self.swapButton: QPushButton
         self.hgMenu: QMenu
         self.tfMenu: QMenu
-        self.o2cMenu: QMenu
+        self.opMenu: QMenu
 
         self.swapButton.clicked.connect(self.swapImages)    # type: ignore
         self.hgMenu.triggered.connect(self.hgTrigger)       # type: ignore
         self.tfMenu.triggered.connect(self.tfTrigger)       # type: ignore
-        self.o2cMenu.triggered.connect(self.o2cTrigger)     # type: ignore
+        self.opMenu.triggered.connect(self.opTrigger)       # type: ignore
 
     @pyqtSlot()
     def swapImages(self):
@@ -48,7 +57,11 @@ class A9_C2(A1_A8):
             QMessageBox(Critical, 'Error', 'Hasil citra masih kosong!').exec()
             return
 
-        self.imageOriginal = self.imageResult
+        if len(self.imageResult.shape) == 3:
+            self.imageOriginal = self.imageResult
+        else:
+            self.imageOriginal = cv2.cvtColor(self.imageResult, cv2.COLOR_GRAY2BGR)
+
         self.displayImage()
 
     @pyqtSlot(QAction)
@@ -81,7 +94,7 @@ class A9_C2(A1_A8):
         mapped.get(menuText)()      # type: ignore
 
     @pyqtSlot(QAction)
-    def o2cTrigger(self, action: QAction):
+    def opTrigger(self, action: QAction):
         if not hasattr(self, 'imageOriginal'):
             return QMessageBox(Critical, 'Error', 'Citra masih kosong!').exec()
 
@@ -147,32 +160,26 @@ class A9_C2(A1_A8):
 
     def __translasi(self):
         dialog = TransformasiDialog()
-        edit_x = QLineEdit()
-        edit_x.setText("1")
-        edit_y = QLineEdit()
-        edit_y.setText("1")
-        dialog.addWidget(edit_x, "X")
-        dialog.addWidget(edit_y, "Y")
+        dialog.addInput("X", "0")
+        dialog.addInput("Y", "0")
 
         if dialog.exec() == QDialog.Rejected: return
 
-        X = int(edit_x.text()) or 1
-        Y = int(edit_y.text()) or 1
+        X, Y = dialog.getValues()
         H, W = self.imageOriginal.shape[:2]
-        H2, W2 = H / X, W / Y
+        H2 = H * X / H
+        W2 = W * Y / W
         T = np.array([[1, 0, H2], [0, 1, W2]])
         self.imageResult = cv2.warpAffine(self.imageOriginal, T, (W, H))
         self.displayImage(2)
 
     def __rotasi(self):
         dialog = TransformasiDialog()
-        edit_deg = QLineEdit()
-        edit_deg.setText("0")
-        dialog.addWidget(edit_deg, "Derajat Rotasi")
+        dialog.addInput("Derajat", "0")
 
         if dialog.exec() == QDialog.Rejected: return
 
-        deg = float(edit_deg.text()) or 0
+        deg = dialog.getValues()[0]
         H, W = self.imageOriginal.shape[:2]
         rotationMatrix = cv2.getRotationMatrix2D((W / 2, H / 2), deg, .7)
         cos = np.abs(rotationMatrix[0, 0])
@@ -187,17 +194,12 @@ class A9_C2(A1_A8):
 
     def __skala(self):
         dialog = TransformasiDialog()
-        edit_x = QLineEdit()
-        edit_x.setText("1")
-        edit_y = QLineEdit()
-        edit_y.setText("1")
-        dialog.addWidget(edit_x, "Skala X")
-        dialog.addWidget(edit_y, "Skala Y")
+        dialog.addInput("Skala X", "1")
+        dialog.addInput("Skala Y", "1")
 
         if dialog.exec() == QDialog.Rejected: return
 
-        fx = int(edit_x.text()) or 1
-        fy = int(edit_y.text()) or 1
+        fx, fy = dialog.getValues()
 
         try:
             self.imageResult = cv2.resize(self.imageOriginal, None, None,
@@ -207,7 +209,17 @@ class A9_C2(A1_A8):
             QMessageBox(Critical, 'Error', 'Input harus skala > 0!').exec()
 
     def __crop(self):
-        pass
+        dialog = TransformasiDialog()
+        dialog.addInput("X1", "0")
+        dialog.addInput("Y1", "0")
+        dialog.addInput("X2", "0")
+        dialog.addInput("Y2", "0")
+
+        if dialog.exec() == QDialog.Rejected: return
+
+        X1, Y1, X2, Y2 = dialog.getValues()
+        self.imageResult = self.imageOriginal[Y1:Y2, X1:X2].copy()
+        self.displayImage(2)
 
 if __name__ == '__main__':
     __import__('aplikasi').main()
