@@ -7,14 +7,16 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 # pyright: reportOptionalMemberAccess=false
-Critical = QMessageBox.Critical
 
 class TransformasiDialog(QDialog):
-    def __init__(self):
+    def __init__(self, inputs=[]):
         super(TransformasiDialog, self).__init__()
         self.setWindowTitle('Pengaturan')
         self.form = QFormLayout()
         self.input: list[QWidget] = []
+
+        for input in inputs:
+            self.addInput(input[0], input[1])
 
     def addInput(self, label: str, placeholder: str):
         edit = QLineEdit()
@@ -23,7 +25,10 @@ class TransformasiDialog(QDialog):
         self.input.append(edit)
 
     def getValues(self):
-        mapped = list(map(lambda w: w.text() or w.placeholderText(), self.input))
+        mapped = list(map(lambda w: w.text()
+            if w.text().lstrip('-').isdigit()
+            else w.placeholderText(),
+                          self.input))
         return list(map(int, mapped))
 
     def exec(self):
@@ -54,8 +59,7 @@ class A9_C2(A1_A8):
     @pyqtSlot()
     def swapImages(self):
         if not hasattr(self, 'imageResult'):
-            QMessageBox(Critical, 'Error', 'Hasil citra masih kosong!').exec()
-            return
+            return self.showMessage('Error', 'Hasil citra masih kosong!')
 
         if len(self.imageResult.shape) == 3:
             self.imageOriginal = self.imageResult
@@ -67,7 +71,7 @@ class A9_C2(A1_A8):
     @pyqtSlot(QAction)
     def hgTrigger(self, action: QAction):
         if not hasattr(self, 'imageOriginal'):
-            return QMessageBox(Critical, 'Error', 'Citra masih kosong!').exec()
+            return self.showMessage('Error', 'Citra masih kosong!')
 
         menuText = action.text()
         mapped = {
@@ -81,7 +85,7 @@ class A9_C2(A1_A8):
     @pyqtSlot(QAction)
     def tfTrigger(self, action: QAction):
         if not hasattr(self, 'imageOriginal'):
-            return QMessageBox(Critical, 'Error', 'Citra masih kosong!').exec()
+            return self.showMessage('Error', 'Citra masih kosong!')
 
         menuText = action.text()
         mapped = {
@@ -96,7 +100,7 @@ class A9_C2(A1_A8):
     @pyqtSlot(QAction)
     def opTrigger(self, action: QAction):
         if not hasattr(self, 'imageOriginal'):
-            return QMessageBox(Critical, 'Error', 'Citra masih kosong!').exec()
+            return self.showMessage('Error', 'Citra masih kosong!')
 
         menuText = action.text()
         file1 = self.originalLabel.toolTip()
@@ -117,37 +121,38 @@ class A9_C2(A1_A8):
             image1 = cv2.cvtColor(image1, cv2.COLOR_BGR2RGB)
             image2 = cv2.cvtColor(image2, cv2.COLOR_BGR2RGB)
 
-        mapped = {
-            'Add': image1 + image2,         # type: ignore
-            'Subtract': image1 - image2,    # type: ignore
-            'AND': cv2.bitwise_and(image1, image2),
-            'OR': cv2.bitwise_or(image1, image2),
-        }
+        try:
+            mapped = {
+                'Add': lambda: image1 + image2,         # type: ignore
+                'Subtract': lambda: image1 - image2,    # type: ignore
+                'AND': lambda: cv2.bitwise_and(image1, image2),
+                'OR': lambda: cv2.bitwise_or(image1, image2),
+                'XOR': lambda: cv2.bitwise_xor(image1, image2),
+            }
 
-        self.imageResult = mapped.get(menuText)     # type: ignore
-        self.displayImage(2)
+            self.imageResult = mapped.get(menuText)()     # type: ignore
+            self.displayImage(2)
+        except:
+            self.showMessage('Error', 'Citra 1 dan 2 harus berukuran sama!')
 
     def __grayscale(self):
         plt.hist(self.imageOriginal.ravel(), 255, (0, 255))
         plt.show()
 
     def __rgb(self):
-        color = ('b', 'g', 'r')
-
-        for i, col in enumerate(color):
-            histo = cv2.calcHist([self.imageOriginal], [i], None, [256], [0, 256])
-            plt.plot(histo, color=col)
+        for i, color in enumerate(('b', 'g', 'r')):
+            histo = cv2.calcHist([self.imageOriginal], [i], None, [255], [0, 255])
+            plt.plot(histo, color=color)
             plt.xlim([0, 256])
 
         plt.show()
 
     def __equalization(self):
-        hist, _ = np.histogram(self.imageOriginal.flatten(), 256, (0, 256))
+        hist, _ = np.histogram(self.imageOriginal.flatten(), 256, (0, 255))
         cdf = hist.cumsum()
         cdf_normalized = cdf * hist.max() / cdf.max()
         cdf_m = np.ma.masked_equal(cdf, 0)
-        cdf_m = (cdf_m - cdf_m.min()) * 255 / (cdf_m.max() -
-        cdf_m.min())
+        cdf_m = (cdf_m - cdf_m.min()) * 255 / (cdf_m.max() - cdf_m.min())
         cdf = np.ma.filled(cdf_m, 0).astype('uint8')
         self.imageResult = cdf[self.imageOriginal]
         self.displayImage(2)
@@ -159,9 +164,7 @@ class A9_C2(A1_A8):
         plt.show()
 
     def __translasi(self):
-        dialog = TransformasiDialog()
-        dialog.addInput("X", "0")
-        dialog.addInput("Y", "0")
+        dialog = TransformasiDialog([ ["X", "0"], ["Y", "0"] ])
 
         if dialog.exec() == QDialog.Rejected: return
 
@@ -174,8 +177,7 @@ class A9_C2(A1_A8):
         self.displayImage(2)
 
     def __rotasi(self):
-        dialog = TransformasiDialog()
-        dialog.addInput("Derajat", "0")
+        dialog = TransformasiDialog([ ["Derajat", "0"] ])
 
         if dialog.exec() == QDialog.Rejected: return
 
@@ -193,9 +195,7 @@ class A9_C2(A1_A8):
         self.displayImage(2)
 
     def __skala(self):
-        dialog = TransformasiDialog()
-        dialog.addInput("Skala X", "1")
-        dialog.addInput("Skala Y", "1")
+        dialog = TransformasiDialog([ ["Skala X", "1"], ["Skala Y", "1"] ])
 
         if dialog.exec() == QDialog.Rejected: return
 
@@ -206,14 +206,13 @@ class A9_C2(A1_A8):
                 fx, fy, cv2.INTER_CUBIC)
             self.displayImage(2)
         except:
-            QMessageBox(Critical, 'Error', 'Input harus skala > 0!').exec()
+            self.showMessage('Error', 'Input harus skala > 0!')
 
     def __crop(self):
-        dialog = TransformasiDialog()
-        dialog.addInput("X1", "0")
-        dialog.addInput("Y1", "0")
-        dialog.addInput("X2", "0")
-        dialog.addInput("Y2", "0")
+        dialog = TransformasiDialog([
+            ["X1", "0"], ["Y1", "0"],
+            ["X2", "0"], ["Y2", "0"],
+        ])
 
         if dialog.exec() == QDialog.Rejected: return
 

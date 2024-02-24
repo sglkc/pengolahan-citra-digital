@@ -8,7 +8,6 @@ from PyQt5.QtWidgets import *   # type: ignore
 from PyQt5.uic import loadUi
 
 # pyright: reportArgumentType=false
-Critical = QMessageBox.Critical
 
 class A1_A8(QMainWindow):
     def __init__(self):
@@ -27,6 +26,9 @@ class A1_A8(QMainWindow):
         self.loadButton.clicked.connect(self.loadClicked)
         self.filterCombo.currentTextChanged.connect(self.filterComboChanged)
         self.resultButton.clicked.connect(self.resultClicked)
+
+    def showMessage(self, title: str, text: str, icon=QMessageBox.Critical):
+        QMessageBox(icon, title, text).exec()
 
     @pyqtSlot()
     def loadClicked(self):
@@ -54,7 +56,7 @@ class A1_A8(QMainWindow):
     @pyqtSlot()
     def resultClicked(self):
         if not hasattr(self, 'imageOriginal'):
-            return QMessageBox(3, 'Error', 'Citra masih kosong!').exec()
+            return self.showMessage('Error', 'Citra masih kosong!')
 
         value = self.filterCombo.currentText()
         mapped = {
