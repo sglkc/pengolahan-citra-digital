@@ -178,6 +178,19 @@
      <string>Tukar dari Hasil</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="popupButton">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>328</y>
+      <width>145</width>
+      <height>34</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Besarkan Citra</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -216,9 +229,23 @@
     <addaction name="opOR"/>
     <addaction name="opXOR"/>
    </widget>
+   <widget class="QMenu" name="kvMenu">
+    <property name="title">
+     <string>Konvolusi</string>
+    </property>
+    <widget class="QMenu" name="kvSmoothing">
+     <property name="title">
+      <string>Smoothing</string>
+     </property>
+     <addaction name="kvMean"/>
+     <addaction name="kvGaussian"/>
+    </widget>
+    <addaction name="kvSmoothing"/>
+   </widget>
    <addaction name="hgMenu"/>
    <addaction name="tfMenu"/>
    <addaction name="opMenu"/>
+   <addaction name="kvMenu"/>
   </widget>
   <action name="hgGrayscale">
    <property name="text">
@@ -278,6 +305,16 @@
   <action name="opXOR">
    <property name="text">
     <string>XOR</string>
+   </property>
+  </action>
+  <action name="kvMean">
+   <property name="text">
+    <string>Mean Filter</string>
+   </property>
+  </action>
+  <action name="kvGaussian">
+   <property name="text">
+    <string>Gaussian Filter</string>
    </property>
   </action>
  </widget>

@@ -8,9 +8,9 @@ import numpy as np
 
 # pyright: reportOptionalMemberAccess=false
 
-class TransformasiDialog(QDialog):
+class InputDialog(QDialog):
     def __init__(self, inputs=[]):
-        super(TransformasiDialog, self).__init__()
+        super(InputDialog, self).__init__()
         self.setWindowTitle('Pengaturan')
         self.form = QFormLayout()
         self.input: list[QWidget] = []
@@ -24,12 +24,15 @@ class TransformasiDialog(QDialog):
         self.form.addRow(QLabel(label), edit)
         self.input.append(edit)
 
-    def getValues(self):
-        mapped = list(map(lambda w: w.text()
-            if w.text().lstrip('-').isdigit()
-            else w.placeholderText(),
+    def getValues(self, map_func=None):
+        def evaluate(val):
+            try: return eval(val)
+            except: return False
+
+        mapped = list(map(lambda w: evaluate(w.text()) or w.placeholderText(),
                           self.input))
-        return list(map(int, mapped))
+
+        return list(map(map_func or int, mapped))
 
     def exec(self):
         self.ok = QPushButton("OK")
@@ -164,7 +167,7 @@ class A9_C2(A1_A8):
         plt.show()
 
     def __translasi(self):
-        dialog = TransformasiDialog([ ["X", "0"], ["Y", "0"] ])
+        dialog = InputDialog([ ["X", "0"], ["Y", "0"] ])
 
         if dialog.exec() == QDialog.Rejected: return
 
@@ -177,7 +180,7 @@ class A9_C2(A1_A8):
         self.displayImage(2)
 
     def __rotasi(self):
-        dialog = TransformasiDialog([ ["Derajat", "0"] ])
+        dialog = InputDialog([ ["Derajat", "0"] ])
 
         if dialog.exec() == QDialog.Rejected: return
 
@@ -195,7 +198,7 @@ class A9_C2(A1_A8):
         self.displayImage(2)
 
     def __skala(self):
-        dialog = TransformasiDialog([ ["Skala X", "1"], ["Skala Y", "1"] ])
+        dialog = InputDialog([ ["Skala X", "1"], ["Skala Y", "1"] ])
 
         if dialog.exec() == QDialog.Rejected: return
 
@@ -209,7 +212,7 @@ class A9_C2(A1_A8):
             self.showMessage('Error', 'Input harus skala > 0!')
 
     def __crop(self):
-        dialog = TransformasiDialog([
+        dialog = InputDialog([
             ["X1", "0"], ["Y1", "0"],
             ["X2", "0"], ["Y2", "0"],
         ])
