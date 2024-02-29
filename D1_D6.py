@@ -17,48 +17,6 @@ class D1_D6(A9_C2):
         self.kvMenu.triggered.connect(self.kvTrigger)
 
     def konvolusi(self, kernel: np.ndarray):
-        """
-        F = (1/9) * np.array([[1,1,1],
-                              [1,1,1],
-                              [1,1,1]])
-        X = self.imageOriginal.copy()
-        X_H, X_W = X.shape[:2]
-        F_H, F_W = F.shape
-        H = F_H // 2
-        W = F_W // 2
-        out = np.zeros((X_H, X_W))
-
-        for i in np.arange(H, X_H - H):
-            for j in np.arange(W, X_W - W):
-                sum = 0
-                for k in np.arange(-H, H + 1):
-                    for l in np.arange(-W, W + 1):
-                        a = X[i + k, j + l]
-                        w = F[H + k, W + l]
-                        sum += (w * a)
-                out[i, j] = sum
-
-        self.imageOriginal = out
-        self.displayImage(2)
-
-        image = self.imageOriginal.copy()
-        image_H, image_W = image.shape[:2]
-        kernel_H, kernel_W = kernel.shape[:2]
-
-        H = kernel_H // 2
-        W = kernel_W // 2
-
-        for i in range(H, image_H-H):
-            for j in range(W, image_W-W):
-                sum =  0
-                for k in range(-H, H+1):
-                    for l in range(-W, W+1):
-                        a = image[i+k, j+l]
-                        w = kernel[H+k, W+l]
-                        sum += w * a
-
-                image[i, j] = np.clip(sum, 0, 255)
-                """
         tinggi_citra, lebar_citra = self.imageOriginal.shape[:2]
         tinggi_kernel, lebar_kernel = kernel.shape[:2]
         H = tinggi_kernel // 2
@@ -73,6 +31,7 @@ class D1_D6(A9_C2):
                         a = self.imageOriginal[i + k, j + l]
                         w = kernel[H + k, W + l]
                         sum += w * a
+
                 out[i, j] = np.clip(sum, 0, 255)
 
         self.imageResult = out
@@ -108,6 +67,8 @@ class D1_D6(A9_C2):
         mapped = {
             'Mean Filter': self.__mean,
             'Gaussian Filter': self.__gaussian,
+            'Median Filter': self.__median,
+            'Max Filter': self.__max
         }
 
         try:
@@ -141,6 +102,48 @@ class D1_D6(A9_C2):
 
         kernel = 1.0 * np.array(mapped.get(filter))
         self.konvolusi(kernel)
+
+    def __median(self):
+        H, W = self.imageOriginal.shape[:2]
+        out = self.imageOriginal.copy()
+
+        for i in range(3, H - 3):
+            for j in range(3, W - 3):
+                neighbors = []
+                for k in range(-3, 4):
+                    for l in range(-3, 4):
+                        a = self.imageOriginal[i + k, j + l]
+                        neighbors.append(a)
+
+                neighbors.sort(key=lambda x: sum(x))
+                median = neighbors[24]
+                out[i, j] = median
+
+        self.imageResult = out
+        self.displayImage(2)
+
+    def __max(self):
+        H, W = self.imageOriginal.shape[:2]
+        out = self.imageOriginal.copy()
+
+        for i in range(3, H - 3):
+            for j in range(3, W - 3):
+                pixel = self.imageOriginal[i, j]
+                max_val = 0
+
+                for k in range(-3, 4):
+                    for l in range(-3, 4):
+                        pixel_value = self.imageOriginal[i + k, j + l]
+                        intensity = np.mean(pixel_value)
+
+                        if intensity > max_val:
+                            max_val = intensity
+                            pixel = pixel_value
+
+                out[i, j] = pixel
+
+        self.imageResult = out
+        self.displayImage(2)
 
 if __name__ == '__main__':
     __import__('aplikasi').main()

@@ -253,6 +253,8 @@
     </widget>
     <addaction name="kvSmoothing"/>
     <addaction name="kvSharpening"/>
+    <addaction name="kvMedian"/>
+    <addaction name="kvMax"/>
    </widget>
    <addaction name="hgMenu"/>
    <addaction name="tfMenu"/>
@@ -357,6 +359,16 @@
   <action name="kvSharpVI">
    <property name="text">
     <string>vi</string>
+   </property>
+  </action>
+  <action name="kvMedian">
+   <property name="text">
+    <string>Median Filter</string>
+   </property>
+  </action>
+  <action name="kvMax">
+   <property name="text">
+    <string>Max Filter</string>
    </property>
   </action>
  </widget>
