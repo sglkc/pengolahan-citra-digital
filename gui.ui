@@ -240,7 +240,19 @@
      <addaction name="kvMean"/>
      <addaction name="kvGaussian"/>
     </widget>
+    <widget class="QMenu" name="kvSharpening">
+     <property name="title">
+      <string>Sharpening</string>
+     </property>
+     <addaction name="kvSharpI"/>
+     <addaction name="kvSharpII"/>
+     <addaction name="kvSharpIII"/>
+     <addaction name="kvSharpIV"/>
+     <addaction name="kvSharpV"/>
+     <addaction name="kvSharpVI"/>
+    </widget>
     <addaction name="kvSmoothing"/>
+    <addaction name="kvSharpening"/>
    </widget>
    <addaction name="hgMenu"/>
    <addaction name="tfMenu"/>
@@ -315,6 +327,36 @@
   <action name="kvGaussian">
    <property name="text">
     <string>Gaussian Filter</string>
+   </property>
+  </action>
+  <action name="kvSharpI">
+   <property name="text">
+    <string>i</string>
+   </property>
+  </action>
+  <action name="kvSharpII">
+   <property name="text">
+    <string>ii</string>
+   </property>
+  </action>
+  <action name="kvSharpIII">
+   <property name="text">
+    <string>iii</string>
+   </property>
+  </action>
+  <action name="kvSharpIV">
+   <property name="text">
+    <string>iv</string>
+   </property>
+  </action>
+  <action name="kvSharpV">
+   <property name="text">
+    <string>v</string>
+   </property>
+  </action>
+  <action name="kvSharpVI">
+   <property name="text">
+    <string>vi</string>
    </property>
   </action>
  </widget>
