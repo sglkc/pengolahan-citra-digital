@@ -213,10 +213,19 @@
     <property name="title">
      <string>Transformasi</string>
     </property>
+    <widget class="QMenu" name="tfFourier">
+     <property name="title">
+      <string>Fourier</string>
+     </property>
+     <addaction name="tfLowPass"/>
+     <addaction name="tfHighPass"/>
+    </widget>
     <addaction name="tfTranslasi"/>
     <addaction name="tfRotasi"/>
     <addaction name="tfSkala"/>
     <addaction name="tfCrop"/>
+    <addaction name="separator"/>
+    <addaction name="tfFourier"/>
    </widget>
    <widget class="QMenu" name="opMenu">
     <property name="title">
@@ -369,6 +378,16 @@
   <action name="kvMax">
    <property name="text">
     <string>Max Filter</string>
+   </property>
+  </action>
+  <action name="tfLowPass">
+   <property name="text">
+    <string>Low Pass</string>
+   </property>
+  </action>
+  <action name="tfHighPass">
+   <property name="text">
+    <string>High Pass</string>
    </property>
   </action>
  </widget>
