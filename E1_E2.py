@@ -16,17 +16,16 @@ class E1_E2(D1_D6):
 
         menuText = action.text()
         mapped = {
-            'Low Pass': self.__dftLowPass,
-            'High Pass': self.__dftHighPass,
+            'Low Pass': lambda: self.__discreteFourierTransform('low'),
+            'High Pass': lambda: self.__discreteFourierTransform('high'),
         }
 
         mapped.get(menuText)()      # type: ignore
         return False
 
-    def __dftLowPass(self):
+    def __discreteFourierTransform(self, filter='low'):
         x = np.arange(256)
         y = np.sin((2 * np.pi) * (x / 3))
-
         y += max(y)
 
         img = np.array(
@@ -45,9 +44,16 @@ class E1_E2(D1_D6):
 
         spectrum = 20 * np.log((cv2.magnitude(dft_shift[:,:,0], dft_shift[:,:,1])))
         rows, cols = img.shape[:2]
-        crow, ccol = int(rows / 2), int(cols / 2)
-        mask = np.zeros((rows, cols, 2), np.uint8)
-        r = 50
+        crow, ccol = rows // 2, cols // 2
+        mask, r = None, None
+
+        if filter == 'low':
+            mask = np.zeros((rows, cols, 2), np.uint8)
+            r = 50
+        else:
+            mask = np.ones((rows, cols, 2), np.uint8)
+            r = 80
+
         center = [crow, ccol]
         x, y = np.ogrid[:rows, :cols]
         mask_area = (x - center[0]) ** 2 + (y - center[1]) ** 2 <= r * r
@@ -90,9 +96,6 @@ class E1_E2(D1_D6):
 
         plt.tight_layout()
         plt.show()
-
-    def __dftHighPass(self):
-        pass
 
 if __name__ == '__main__':
     __import__('aplikasi').main()
