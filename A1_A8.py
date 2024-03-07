@@ -29,6 +29,7 @@ class A1_A8(QMainWindow):
 
     def showMessage(self, title: str, text: str, icon=QMessageBox.Critical):
         QMessageBox(icon, title, text).exec()
+        return True
 
     @pyqtSlot()
     def loadClicked(self):
@@ -38,6 +39,8 @@ class A1_A8(QMainWindow):
         if file:
             self.loadImage(file)
             self.originalLabel.setToolTip(file)
+
+        return True
 
     @pyqtSlot()
     def filterComboChanged(self):
@@ -52,6 +55,7 @@ class A1_A8(QMainWindow):
         }
 
         self.slider.setEnabled(mapped.get(value))
+        return True
 
     @pyqtSlot()
     def resultClicked(self):
@@ -70,6 +74,7 @@ class A1_A8(QMainWindow):
 
         mapped.get(value)() # type: ignore
         self.displayImage(2)
+        return True
 
     def __grayscale(self):
         H, W = self.imageOriginal.shape[:2]

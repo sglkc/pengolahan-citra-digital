@@ -84,6 +84,7 @@ class A9_C2(A1_A8):
         }
 
         mapped.get(menuText)()      # type: ignore
+        return True
 
     @pyqtSlot(QAction)
     def tfTrigger(self, action: QAction):
@@ -98,7 +99,11 @@ class A9_C2(A1_A8):
             'Crop': self.__crop
         }
 
-        mapped.get(menuText)()      # type: ignore
+        try:
+            mapped.get(menuText)()      # type: ignore
+            return True
+        except:
+            return False
 
     @pyqtSlot(QAction)
     def opTrigger(self, action: QAction):
@@ -136,7 +141,9 @@ class A9_C2(A1_A8):
             self.imageResult = mapped.get(menuText)()     # type: ignore
             self.displayImage(2)
         except:
-            self.showMessage('Error', 'Citra 1 dan 2 harus berukuran sama!')
+            return self.showMessage('Error', 'Citra 1 dan 2 harus berukuran sama!')
+
+        return True
 
     def __grayscale(self):
         plt.hist(self.imageOriginal.ravel(), 255, (0, 255))

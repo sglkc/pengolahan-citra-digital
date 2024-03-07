@@ -71,10 +71,14 @@ class D1_D6(A9_C2):
             'Max Filter': self.__max
         }
 
-        try:
-            mapped.get(menuText)()      # type: ignore
-        except:
+        sharpening = ['i', 'ii', 'iii', 'iv', 'v', 'vi']
+
+        if menuText in sharpening:
             self.__sharpening(menuText)
+        else:
+            mapped.get(menuText)()      # type: ignore
+
+        return True
 
     def __mean(self):
         kernel = np.full((3, 3), 1/9)
