@@ -83,8 +83,14 @@ class A9_C2(A1_A8):
             'Equalization': self.__equalization
         }
 
-        mapped.get(menuText)()      # type: ignore
-        return True
+        try:
+            mapped.get(menuText)()      # type: ignore
+            return True
+        except Exception as error:
+            if isinstance(error, TypeError):
+                return False
+
+            raise error
 
     @pyqtSlot(QAction)
     def tfTrigger(self, action: QAction):
@@ -102,8 +108,11 @@ class A9_C2(A1_A8):
         try:
             mapped.get(menuText)()      # type: ignore
             return True
-        except:
-            return False
+        except Exception as error:
+            if isinstance(error, TypeError):
+                return False
+
+            raise error
 
     @pyqtSlot(QAction)
     def opTrigger(self, action: QAction):

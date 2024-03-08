@@ -13,29 +13,35 @@ class D1_D6(A9_C2):
         self.popupButton: QPushButton
         self.kvMenu: QMenu
 
-        self.popupButton.clicked.connect(self.popupClicked)
-        self.kvMenu.triggered.connect(self.kvTrigger)
+        self.popupButton.clicked.connect(self.popupClicked)     # type: ignore
+        self.kvMenu.triggered.connect(self.kvTrigger)           # type: ignore
 
-    def konvolusi(self, kernel: np.ndarray):
-        tinggi_citra, lebar_citra = self.imageOriginal.shape[:2]
+    def konvolusi(self, kernel: np.ndarray, image=None, show=True):
+        if image is None:
+            image = self.imageOriginal
+
+        tinggi_citra, lebar_citra = image.shape[:2]
         tinggi_kernel, lebar_kernel = kernel.shape[:2]
         H = tinggi_kernel // 2
         W = lebar_kernel // 2
-        out = np.zeros_like(self.imageOriginal)
+        out = np.zeros_like(image)
 
         for i in range(H, tinggi_citra - H):
             for j in range(W, lebar_citra - W):
                 sum = 0
                 for k in range(-H, H + 1):
                     for l in range(-W, W + 1):
-                        a = self.imageOriginal[i + k, j + l]
+                        a = image[i + k, j + l]
                         w = kernel[H + k, W + l]
                         sum += w * a
 
                 out[i, j] = np.clip(sum, 0, 255)
 
-        self.imageResult = out
-        self.displayImage(2)
+        if show:
+            self.imageResult = out
+            self.displayImage(2)
+
+        return out
 
     @pyqtSlot()
     def popupClicked(self):
@@ -75,10 +81,16 @@ class D1_D6(A9_C2):
 
         if menuText in sharpening:
             self.__sharpening(menuText)
-        else:
-            mapped.get(menuText)()      # type: ignore
+            return True
 
-        return True
+        try:
+            mapped.get(menuText)()      # type: ignore
+            return True
+        except Exception as error:
+            if isinstance(error, TypeError):
+                return False
+
+            raise error
 
     def __mean(self):
         kernel = np.full((3, 3), 1/9)

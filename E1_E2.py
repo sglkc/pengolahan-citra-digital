@@ -20,8 +20,14 @@ class E1_E2(D1_D6):
             'High Pass': lambda: self.__discreteFourierTransform('high'),
         }
 
-        mapped.get(menuText)()      # type: ignore
-        return False
+        try:
+            mapped.get(menuText)()      # type: ignore
+            return True
+        except Exception as error:
+            if isinstance(error, TypeError):
+                return False
+
+            raise error
 
     def __discreteFourierTransform(self, filter='low'):
         x = np.arange(256)
