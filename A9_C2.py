@@ -2,7 +2,7 @@ import cv2
 from cv2.typing import MatLike
 from A1_A8 import A1_A8
 from PyQt5.QtWidgets import *   # type: ignore
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import Qt, pyqtSlot
 from matplotlib import pyplot as plt
 import numpy as np
 
@@ -16,21 +16,39 @@ class InputDialog(QDialog):
         self.input: list[QWidget] = []
 
         for input in inputs:
-            self.addInput(input[0], input[1])
+            self.addInput(*input)
 
-    def addInput(self, label: str, placeholder: str):
-        edit = QLineEdit()
-        edit.setPlaceholderText(placeholder)
+    def addInput(self, label: str, placeholder, edit='text'):
+        if edit == 'text':
+            edit = QLineEdit()
+            edit.setPlaceholderText(placeholder)
+        elif edit == 'slider':
+            edit = QSlider()
+            edit.setMinimum(0)
+            edit.setMaximum(100)
+            edit.setSingleStep(1)
+            edit.setValue(placeholder)
+            edit.setOrientation(Qt.Orientation.Horizontal)
+
         self.form.addRow(QLabel(label), edit)
         self.input.append(edit)
 
     def getValues(self, map_func=None):
-        def evaluate(val):
-            try: return eval(val)
-            except: return False
+        def getValue(edit):
+            value = ''
 
-        mapped = list(map(lambda w: evaluate(w.text()) or w.placeholderText(),
-                          self.input))
+            if isinstance(edit, QSlider):
+                value = edit.value()
+            elif isinstance(edit, QLineEdit):
+                value = edit.placeholderText()
+                try:
+                    value = eval(edit.text())
+                except:
+                    pass
+
+            return value
+
+        mapped = list(map(lambda edit: getValue(edit), self.input))
 
         return list(map(map_func or int, mapped))
 

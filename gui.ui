@@ -260,18 +260,19 @@
      <addaction name="kvSharpV"/>
      <addaction name="kvSharpVI"/>
     </widget>
-    <widget class="QMenu" name="menuEdge_Detection">
+    <widget class="QMenu" name="kvEdge">
      <property name="title">
       <string>Edge Detection</string>
      </property>
-     <addaction name="actionSobel"/>
-     <addaction name="actionCanny"/>
+     <addaction name="kvSobel"/>
+     <addaction name="kvPrewitt"/>
+     <addaction name="kvCanny"/>
     </widget>
     <addaction name="kvSmoothing"/>
     <addaction name="kvSharpening"/>
     <addaction name="kvMedian"/>
     <addaction name="kvMax"/>
-    <addaction name="menuEdge_Detection"/>
+    <addaction name="kvEdge"/>
    </widget>
    <addaction name="hgMenu"/>
    <addaction name="tfMenu"/>
@@ -398,14 +399,24 @@
     <string>High Pass</string>
    </property>
   </action>
-  <action name="actionSobel">
+  <action name="kvSobel">
    <property name="text">
     <string>Sobel</string>
    </property>
   </action>
-  <action name="actionCanny">
+  <action name="kvCanny">
    <property name="text">
     <string>Canny</string>
+   </property>
+  </action>
+  <action name="kvPrewitt">
+   <property name="text">
+    <string>Prewitt</string>
+   </property>
+  </action>
+  <action name="kvRobert">
+   <property name="text">
+    <string>Robert</string>
    </property>
   </action>
  </widget>

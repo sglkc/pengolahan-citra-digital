@@ -1,9 +1,9 @@
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QAction
+from PyQt5.QtWidgets import QAction, QDialog
 import cv2
 import numpy as np
-from matplotlib import pyplot as plt
 
+from A9_C2 import InputDialog
 from E1_E2 import E1_E2
 
 class F1_F2(E1_E2):
@@ -16,7 +16,8 @@ class F1_F2(E1_E2):
 
         menuText = action.text()
         mapped = {
-            'Sobel': self.__sobel,
+            'Sobel': lambda: self.__edgeDetect('sobel'),
+            'Prewitt': lambda: self.__edgeDetect('prewitt'),
             'Canny': self.__canny,
         }
 
@@ -29,14 +30,24 @@ class F1_F2(E1_E2):
 
             raise error
 
-    def __sobel(self):
+    def __edgeDetect(self, method='sobel'):
         img = cv2.cvtColor(self.imageOriginal, cv2.COLOR_BGR2GRAY).astype(np.float32)
+
+        # Kernel default sobel
         kernel_x = np.array([[-1, 0, 1],
-             [-2, 0, -2],
-             [-1, 0, -1]])
+                             [-2, 0, -2],
+                             [-1, 0, -1]])
         kernel_y = np.array([[-1, -2, -1],
-             [0, 0, 0],
-             [1, 2, 1]])
+                             [0, 0, 0],
+                             [1, 2, 1]])
+
+        if method == 'prewitt':
+            kernel_x = np.array([[-1, 0, 1],
+                                 [-1, 0, 1],
+                                 [-1, 0, 1]])
+            kernel_y = np.array([[-1, -1, -1],
+                                 [0, 0, 0],
+                                 [1, 1, 1]])
 
         Gx = self.konvolusi(kernel_x, img, False)
         Gy = self.konvolusi(kernel_y, img, False)
@@ -44,15 +55,15 @@ class F1_F2(E1_E2):
         gradien = np.sqrt((Gx * Gx) + (Gy * Gy))    # type: ignore
         normal = cv2.normalize(gradien, gradien, 0, 255, cv2.NORM_MINMAX, dtype=cv2.CV_8U)
 
-        plt.imshow(normal, cmap='gray')
-        plt.axis('off')
-        plt.tight_layout()
-        plt.show()
-
         self.imageResult = cv2.cvtColor(normal, cv2.COLOR_GRAY2BGR)
         self.displayImage(2)
 
     def __canny(self):
+        dialog = InputDialog([ ['Weak', 50, 'slider'], ['Strong', 100, 'slider'] ])
+
+        if dialog.exec() == QDialog.Rejected: return
+
+        weak, strong = dialog.getValues(lambda val: int(val) * 2.55)
         img = cv2.cvtColor(self.imageOriginal, cv2.COLOR_BGR2GRAY).astype(np.float32)
 
         gauss = (1.0 / 57) * np.array([
@@ -107,9 +118,6 @@ class F1_F2(E1_E2):
                 except IndexError:
                     pass
 
-        weak = 50
-        strong = 150
-
         for i in range(H):
             for j in range(W):
                 a = Z[i, j]
@@ -135,10 +143,6 @@ class F1_F2(E1_E2):
                             Z[i, j] = 0
                     except IndexError:
                         pass
-
-        plt.imshow(Z, cmap='gray')
-        plt.axis('off')
-        plt.show()
 
         self.imageResult = cv2.cvtColor(Z, cv2.COLOR_GRAY2BGR)
         self.displayImage(2)
