@@ -1,19 +1,14 @@
 from PyQt5.QtWidgets import *   # type: ignore
 from PyQt5.QtCore import pyqtSlot
-from matplotlib.axes import Axes
-import matplotlib.pyplot as plt
 import numpy as np
-import cv2
 from A9_C2 import A9_C2
 
 class D1_D6(A9_C2):
     def __init__(self):
         super(D1_D6, self).__init__()
 
-        self.popupButton: QPushButton
         self.kvMenu: QMenu
 
-        self.popupButton.clicked.connect(self.popupClicked)     # type: ignore
         self.kvMenu.triggered.connect(self.kvTrigger)           # type: ignore
 
     def konvolusi(self, kernel: np.ndarray, image=None, show=True):
@@ -42,27 +37,6 @@ class D1_D6(A9_C2):
             self.displayImage(2)
 
         return out
-
-    @pyqtSlot()
-    def popupClicked(self):
-        if not hasattr(self, 'imageOriginal'):
-            return self.showMessage('Error', 'Citra masih kosong!')
-
-        fig, axes = plt.subplots(1, 2)
-        axes: tuple[Axes, Axes]
-        axes[0].imshow(cv2.cvtColor(self.imageOriginal, cv2.COLOR_BGR2RGB))
-
-        if not hasattr(self, 'imageResult'):
-            axes[1].remove()
-        elif len(self.imageResult.shape) == 3:
-            axes[1].imshow(cv2.cvtColor(self.imageResult, cv2.COLOR_BGR2RGB))
-        else:
-            axes[1].imshow(cv2.cvtColor(self.imageResult, cv2.COLOR_GRAY2BGR))
-
-        axes[0].axis('off')
-        axes[1].axis('off')
-        fig.tight_layout()
-        fig.show()
 
     @pyqtSlot(QAction)
     def kvTrigger(self, action):

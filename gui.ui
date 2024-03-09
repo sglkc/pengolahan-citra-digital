@@ -170,25 +170,6 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
-       <widget class="QPushButton" name="popupButton">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-          <horstretch>1</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>144</width>
-          <height>32</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Besarkan Citra</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="2">
        <widget class="QPushButton" name="resultButton">
         <property name="sizePolicy">
@@ -304,19 +285,10 @@
     <property name="title">
      <string>Transformasi</string>
     </property>
-    <widget class="QMenu" name="tfFourier">
-     <property name="title">
-      <string>Fourier</string>
-     </property>
-     <addaction name="tfLowPass"/>
-     <addaction name="tfHighPass"/>
-    </widget>
     <addaction name="tfTranslasi"/>
     <addaction name="tfRotasi"/>
     <addaction name="tfSkala"/>
     <addaction name="tfCrop"/>
-    <addaction name="separator"/>
-    <addaction name="tfFourier"/>
    </widget>
    <widget class="QMenu" name="opMenu">
     <property name="title">
@@ -359,11 +331,19 @@
      <addaction name="kvPrewitt"/>
      <addaction name="kvCanny"/>
     </widget>
+    <widget class="QMenu" name="kvFourier">
+     <property name="title">
+      <string>Fourier</string>
+     </property>
+     <addaction name="tfLowPass"/>
+     <addaction name="tfHighPass"/>
+    </widget>
     <addaction name="kvSmoothing"/>
     <addaction name="kvSharpening"/>
     <addaction name="kvMedian"/>
     <addaction name="kvMax"/>
     <addaction name="separator"/>
+    <addaction name="kvFourier"/>
     <addaction name="kvEdge"/>
    </widget>
    <widget class="QMenu" name="tampilanMenu">
@@ -373,11 +353,11 @@
     <addaction name="tampilanPopUp"/>
     <addaction name="tampilanScale"/>
    </widget>
+   <addaction name="tampilanMenu"/>
    <addaction name="hgMenu"/>
    <addaction name="tfMenu"/>
    <addaction name="opMenu"/>
    <addaction name="kvMenu"/>
-   <addaction name="tampilanMenu"/>
   </widget>
   <action name="hgGrayscale">
    <property name="text">

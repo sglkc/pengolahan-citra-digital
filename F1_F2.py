@@ -1,5 +1,7 @@
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QAction, QDialog
+from matplotlib.axes import Axes
+import matplotlib.pyplot as plt
 import cv2
 import numpy as np
 
@@ -15,6 +17,27 @@ class F1_F2(E1_E2):
 
         self.tampilanPopUp.triggered.connect(self.popupClicked) # type: ignore
         self.tampilanScale.triggered.connect(self.autoScale)    # type: ignore
+
+    @pyqtSlot()
+    def popupClicked(self):
+        if not hasattr(self, 'imageOriginal'):
+            return self.showMessage('Error', 'Citra masih kosong!')
+
+        fig, axes = plt.subplots(1, 2)
+        axes: tuple[Axes, Axes]
+        axes[0].imshow(cv2.cvtColor(self.imageOriginal, cv2.COLOR_BGR2RGB))
+
+        if not hasattr(self, 'imageResult'):
+            axes[1].remove()
+        elif len(self.imageResult.shape) == 3:
+            axes[1].imshow(cv2.cvtColor(self.imageResult, cv2.COLOR_BGR2RGB))
+        else:
+            axes[1].imshow(cv2.cvtColor(self.imageResult, cv2.COLOR_GRAY2BGR))
+
+        axes[0].axis('off')
+        axes[1].axis('off')
+        fig.tight_layout()
+        fig.show()
 
     @pyqtSlot(bool)
     def autoScale(self, checked: bool):
@@ -70,13 +93,14 @@ class F1_F2(E1_E2):
         self.displayImage(2)
 
     def __canny(self):
-        dialog = InputDialog([ ['Weak', 50, 'slider'], ['Strong', 100, 'slider'] ])
+        dialog = InputDialog([ ['Weak', 50, 'slider'], ['Strong', 70, 'slider'] ])
 
         if dialog.exec() == QDialog.Rejected: return
 
         weak, strong = dialog.getValues(lambda val: int(val) * 2.55)
         img = cv2.cvtColor(self.imageOriginal, cv2.COLOR_BGR2GRAY).astype(np.float32)
 
+        # Gauss Filter
         gauss = (1.0 / 57) * np.array([
             [0, 1, 2, 1, 0],
             [1, 3, 5, 3, 1],
@@ -87,21 +111,23 @@ class F1_F2(E1_E2):
 
         img = self.konvolusi(gauss, img, False)
 
+        # Deteksi Tepi Sobel
         kernel_x = np.array([[-1, 0, 1],
-             [-2, 0, -2],
-             [-1, 0, -1]])
+                             [-2, 0, -2],
+                             [-1, 0, -1]])
 
         kernel_y = np.array([[-1, -2, -1],
-             [0, 0, 0],
-             [1, 2, 1]])
+                             [0, 0, 0],
+                             [1, 2, 1]])
 
         Gx = self.konvolusi(kernel_x, img, False)
         Gy = self.konvolusi(kernel_y, img, False)
 
         magnitude = np.sqrt((Gx ** 2) + (Gy ** 2))      # type: ignore
         magnitude = (magnitude / np.max(magnitude)) * 255
-        theta = np.arctan2(Gx, Gy)
 
+        # Non Maximum supression
+        theta = np.arctan2(Gx, Gy)
         angle = theta * 180 / np.pi
         angle[angle < 0] += 180
 
@@ -129,6 +155,9 @@ class F1_F2(E1_E2):
                 except IndexError:
                     pass
 
+        # Hystersis Thresholding
+        # weak, strong = 100, 150
+
         for i in range(H):
             for j in range(W):
                 a = Z[i, j]
@@ -138,6 +167,8 @@ class F1_F2(E1_E2):
                     if a > strong: Z[i, j] = 255
                 else:
                     Z[i, j] = 0
+
+        strong = 255
 
         for i in range(1, H - 1):
             for j in range(1, W - 1):

@@ -12,8 +12,8 @@ class E1_E2(D1_D6):
         super(E1_E2, self).__init__()
 
     @pyqtSlot(QAction)
-    def tfTrigger(self, action: QAction):
-        if super().tfTrigger(action): return True
+    def kvTrigger(self, action: QAction):
+        if super().kvTrigger(action): return True
 
         menuText = action.text()
         mapped = {
@@ -39,16 +39,6 @@ class E1_E2(D1_D6):
         x = np.arange(256)
         y = np.sin((2 * np.pi) * (x / 3))
         y += max(y)
-
-        img = np.array(
-            [
-                [
-                    y[j] * 127 for j in range(256)
-                ] for _ in range(256)
-            ],
-            dtype=np.uint8)
-
-        # plt.imshow(img)
 
         img = cv2.cvtColor(self.imageOriginal, cv2.COLOR_BGR2GRAY)      # type: ignore
         dft = cv2.dft(np.float32(img), flags=cv2.DFT_COMPLEX_OUTPUT)    # type: ignore
