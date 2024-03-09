@@ -10,6 +10,17 @@ class F1_F2(E1_E2):
     def __init__(self):
         super(F1_F2, self).__init__()
 
+        self.tampilanScale: QAction
+        self.tampilanPopUp: QAction
+
+        self.tampilanPopUp.triggered.connect(self.popupClicked) # type: ignore
+        self.tampilanScale.triggered.connect(self.autoScale)    # type: ignore
+
+    @pyqtSlot(bool)
+    def autoScale(self, checked: bool):
+        self.originalLabel.setScaledContents(checked)
+        self.resultLabel.setScaledContents(checked)
+
     @pyqtSlot(QAction)
     def kvTrigger(self, action: QAction):
         if super().kvTrigger(action): return True

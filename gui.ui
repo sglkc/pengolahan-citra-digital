@@ -7,197 +7,288 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>662</width>
-    <height>419</height>
+    <width>640</width>
+    <height>420</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Praktikum PCD - (152022099) Cikal Gemintang Seya</string>
   </property>
+  <property name="layoutDirection">
+   <enum>Qt::LeftToRight</enum>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="originalLabel">
-    <property name="geometry">
-     <rect>
-      <x>32</x>
-      <y>16</y>
-      <width>289</width>
-      <height>257</height>
-     </rect>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>16</number>
     </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
+    <property name="topMargin">
+     <number>16</number>
     </property>
-    <property name="frameShape">
-     <enum>QFrame::Box</enum>
+    <property name="rightMargin">
+     <number>16</number>
     </property>
-    <property name="lineWidth">
-     <number>1</number>
+    <property name="bottomMargin">
+     <number>16</number>
     </property>
-    <property name="text">
-     <string/>
+    <property name="spacing">
+     <number>8</number>
     </property>
-    <property name="scaledContents">
-     <bool>false</bool>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="loadButton">
-    <property name="geometry">
-     <rect>
-      <x>32</x>
-      <y>288</y>
-      <width>145</width>
-      <height>34</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Muat Citra</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="resultLabel">
-    <property name="geometry">
-     <rect>
-      <x>336</x>
-      <y>16</y>
-      <width>289</width>
-      <height>257</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::Box</enum>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="scaledContents">
-     <bool>false</bool>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="resultButton">
-    <property name="geometry">
-     <rect>
-      <x>480</x>
-      <y>288</y>
-      <width>145</width>
-      <height>34</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Apply</string>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="filterCombo">
-    <property name="geometry">
-     <rect>
-      <x>192</x>
-      <y>288</y>
-      <width>273</width>
-      <height>32</height>
-     </rect>
-    </property>
-    <item>
-     <property name="text">
-      <string>Grayscale</string>
-     </property>
+    <item row="1" column="0" colspan="4">
+     <layout class="QGridLayout" name="gridLayout_2">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>8</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="originalLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+          <horstretch>1</horstretch>
+          <verstretch>1</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Box</enum>
+        </property>
+        <property name="lineWidth">
+         <number>1</number>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="scaledContents">
+         <bool>false</bool>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="resultLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+          <horstretch>1</horstretch>
+          <verstretch>1</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Box</enum>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="scaledContents">
+         <bool>false</bool>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
-    <item>
-     <property name="text">
-      <string>Brightness</string>
-     </property>
+    <item row="2" column="0" colspan="4">
+     <layout class="QGridLayout" name="gridLayout_3">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>8</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QPushButton" name="loadButton">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>144</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Muat Citra</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QPushButton" name="swapButton">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>144</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Tukar dari Hasil</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QPushButton" name="popupButton">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>144</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Besarkan Citra</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="resultButton">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>144</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Apply</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="filterCombo">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>2</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>32</height>
+         </size>
+        </property>
+        <item>
+         <property name="text">
+          <string>Grayscale</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Brightness</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Contrast</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Stretching</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Negative</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Binary</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QSlider" name="slider">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="pageStep">
+         <number>0</number>
+        </property>
+        <property name="value">
+         <number>80</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
-    <item>
-     <property name="text">
-      <string>Contrast</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Stretching</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Negative</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Binary</string>
-     </property>
-    </item>
-   </widget>
-   <widget class="QSlider" name="slider">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>192</x>
-      <y>336</y>
-      <width>273</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="maximum">
-     <number>100</number>
-    </property>
-    <property name="pageStep">
-     <number>0</number>
-    </property>
-    <property name="value">
-     <number>80</number>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="swapButton">
-    <property name="geometry">
-     <rect>
-      <x>32</x>
-      <y>328</y>
-      <width>145</width>
-      <height>34</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Tukar dari Hasil</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="popupButton">
-    <property name="geometry">
-     <rect>
-      <x>480</x>
-      <y>328</y>
-      <width>145</width>
-      <height>34</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Besarkan Citra</string>
-    </property>
-   </widget>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>662</width>
+     <width>640</width>
      <height>30</height>
     </rect>
    </property>
@@ -272,12 +363,21 @@
     <addaction name="kvSharpening"/>
     <addaction name="kvMedian"/>
     <addaction name="kvMax"/>
+    <addaction name="separator"/>
     <addaction name="kvEdge"/>
+   </widget>
+   <widget class="QMenu" name="tampilanMenu">
+    <property name="title">
+     <string>Tampilan</string>
+    </property>
+    <addaction name="tampilanPopUp"/>
+    <addaction name="tampilanScale"/>
    </widget>
    <addaction name="hgMenu"/>
    <addaction name="tfMenu"/>
    <addaction name="opMenu"/>
    <addaction name="kvMenu"/>
+   <addaction name="tampilanMenu"/>
   </widget>
   <action name="hgGrayscale">
    <property name="text">
@@ -417,6 +517,19 @@
   <action name="kvRobert">
    <property name="text">
     <string>Robert</string>
+   </property>
+  </action>
+  <action name="tampilanPopUp">
+   <property name="text">
+    <string>Pop Up</string>
+   </property>
+  </action>
+  <action name="tampilanScale">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Auto Scale</string>
    </property>
   </action>
  </widget>
