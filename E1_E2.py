@@ -4,6 +4,7 @@ import cv2
 from matplotlib import pyplot as plt
 import numpy as np
 
+from A9_C2 import InputDialog
 from D1_D6 import D1_D6
 
 class E1_E2(D1_D6):
@@ -30,6 +31,11 @@ class E1_E2(D1_D6):
             raise error
 
     def __discreteFourierTransform(self, filter='low'):
+        dialog = InputDialog([ ['Radius', 50, 'slider'] ])
+
+        if dialog.exec() == QDialog.Rejected: return
+
+        r = dialog.getValues()[0]
         x = np.arange(256)
         y = np.sin((2 * np.pi) * (x / 3))
         y += max(y)
@@ -51,19 +57,17 @@ class E1_E2(D1_D6):
         spectrum = 20 * np.log((cv2.magnitude(dft_shift[:,:,0], dft_shift[:,:,1])))
         rows, cols = img.shape[:2]
         crow, ccol = rows // 2, cols // 2
-        mask, r = None, None
+        mask = None
 
         if filter == 'low':
             mask = np.zeros((rows, cols, 2), np.uint8)
-            r = 50
         else:
             mask = np.ones((rows, cols, 2), np.uint8)
-            r = 80
 
         center = [crow, ccol]
         x, y = np.ogrid[:rows, :cols]
         mask_area = (x - center[0]) ** 2 + (y - center[1]) ** 2 <= r * r
-        mask[mask_area] = 1
+        mask[mask_area] = int(filter == 'low')
 
         fshift = dft_shift * mask
         fshift_mask_mag = 20 * np.log(cv2.magnitude(fshift[:,:,0], fshift[:,:,1]))
@@ -88,7 +92,7 @@ class E1_E2(D1_D6):
         ax2 = fig.add_subplot(2, 2, 2)
         ax2.set_axis_off()
         ax2.imshow(spectrum, cmap='gray')
-        ax2.set_title('FFT Citra')
+        ax2.set_title('FFT Asli')
 
         ax3 = fig.add_subplot(2, 2, 3)
         ax3.set_axis_off()

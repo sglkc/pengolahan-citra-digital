@@ -24,10 +24,11 @@ class InputDialog(QDialog):
             edit.setPlaceholderText(placeholder)
         elif edit == 'slider':
             edit = QSlider()
+            edit.setMinimumWidth(150)
             edit.setMinimum(0)
             edit.setMaximum(100)
             edit.setSingleStep(1)
-            edit.setValue(placeholder)
+            edit.setValue(int(placeholder))
             edit.setOrientation(Qt.Orientation.Horizontal)
 
         self.form.addRow(QLabel(label), edit)
