@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>420</height>
+    <width>731</width>
+    <height>433</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -135,7 +135,7 @@
       <item row="0" column="0">
        <widget class="QPushButton" name="loadButton">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>1</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -144,6 +144,12 @@
          <size>
           <width>144</width>
           <height>32</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>256</width>
+          <height>16777215</height>
          </size>
         </property>
         <property name="text">
@@ -154,15 +160,21 @@
       <item row="2" column="0">
        <widget class="QPushButton" name="swapButton">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>1</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
         <property name="minimumSize">
          <size>
-          <width>144</width>
+          <width>143</width>
           <height>32</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>256</width>
+          <height>16777215</height>
          </size>
         </property>
         <property name="text">
@@ -173,7 +185,7 @@
       <item row="0" column="2">
        <widget class="QPushButton" name="resultButton">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>1</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -182,6 +194,12 @@
          <size>
           <width>144</width>
           <height>32</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>256</width>
+          <height>16777215</height>
          </size>
         </property>
         <property name="text">
@@ -201,6 +219,12 @@
          <size>
           <width>0</width>
           <height>32</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>320</width>
+          <height>16777215</height>
          </size>
         </property>
         <item>
@@ -246,6 +270,12 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="maximumSize">
+         <size>
+          <width>320</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="maximum">
          <number>100</number>
         </property>
@@ -269,7 +299,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>640</width>
+     <width>731</width>
      <height>30</height>
     </rect>
    </property>
@@ -362,12 +392,23 @@
     <addaction name="mfOpening"/>
     <addaction name="mfClosing"/>
    </widget>
+   <widget class="QMenu" name="ltMenu">
+    <property name="title">
+     <string>Local Thres.</string>
+    </property>
+    <addaction name="ltBinary"/>
+    <addaction name="ltBinaryInv"/>
+    <addaction name="ltTrunc"/>
+    <addaction name="ltToZero"/>
+    <addaction name="ltToZeroInv"/>
+   </widget>
    <addaction name="tampilanMenu"/>
    <addaction name="hgMenu"/>
    <addaction name="tfMenu"/>
    <addaction name="opMenu"/>
    <addaction name="kvMenu"/>
    <addaction name="mfMenu"/>
+   <addaction name="ltMenu"/>
   </widget>
   <action name="hgGrayscale">
    <property name="text">
@@ -540,6 +581,31 @@
   <action name="mfClosing">
    <property name="text">
     <string>Closing</string>
+   </property>
+  </action>
+  <action name="ltBinary">
+   <property name="text">
+    <string>Binary</string>
+   </property>
+  </action>
+  <action name="ltBinaryInv">
+   <property name="text">
+    <string>Binary Invert</string>
+   </property>
+  </action>
+  <action name="ltTrunc">
+   <property name="text">
+    <string>Trunc</string>
+   </property>
+  </action>
+  <action name="ltToZero">
+   <property name="text">
+    <string>To Zero</string>
+   </property>
+  </action>
+  <action name="ltToZeroInv">
+   <property name="text">
+    <string>To Zero Invert</string>
    </property>
   </action>
  </widget>

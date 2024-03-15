@@ -1,12 +1,8 @@
 from types import LambdaType
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QAction, QDialog, QMenu
-from matplotlib.axes import Axes
-import matplotlib.pyplot as plt
+from PyQt5.QtWidgets import QAction, QMenu
 import cv2
-import numpy as np
 
-from A9_C2 import InputDialog
 from F1_F2 import F1_F2
 
 class G1(F1_F2):
@@ -33,6 +29,7 @@ class G1(F1_F2):
     def morfologi(self, fungsi: LambdaType):
         # grayscalisasikan
         # binerisasi
+
         kernel = cv2.getStructuringElement(cv2.MORPH_CROSS, (5, 5))
         image = fungsi(self.imageOriginal, kernel)
 
