@@ -392,13 +392,13 @@
     <addaction name="mfOpening"/>
     <addaction name="mfClosing"/>
    </widget>
-   <widget class="QMenu" name="thMenu">
+   <widget class="QMenu" name="sgMenu">
     <property name="title">
-     <string>Thresholding</string>
+     <string>Segmentasi</string>
     </property>
-    <widget class="QMenu" name="thGlobal">
+    <widget class="QMenu" name="sgGlobalThres">
      <property name="title">
-      <string>Global</string>
+      <string>Global Thres.</string>
      </property>
      <addaction name="thBinary"/>
      <addaction name="thBinaryInv"/>
@@ -406,16 +406,17 @@
      <addaction name="thToZero"/>
      <addaction name="thToZeroInv"/>
     </widget>
-    <widget class="QMenu" name="thLocalAdapt">
+    <widget class="QMenu" name="sgLocalAdaptThres">
      <property name="title">
-      <string>Local/Adaptive</string>
+      <string>Local/Adaptive Thres.</string>
      </property>
      <addaction name="thMean"/>
      <addaction name="thGaussian"/>
      <addaction name="thOtsu"/>
     </widget>
-    <addaction name="thGlobal"/>
-    <addaction name="thLocalAdapt"/>
+    <addaction name="sgGlobalThres"/>
+    <addaction name="sgLocalAdaptThres"/>
+    <addaction name="sgContour"/>
    </widget>
    <addaction name="tampilanMenu"/>
    <addaction name="hgMenu"/>
@@ -423,7 +424,7 @@
    <addaction name="opMenu"/>
    <addaction name="kvMenu"/>
    <addaction name="mfMenu"/>
-   <addaction name="thMenu"/>
+   <addaction name="sgMenu"/>
   </widget>
   <action name="hgGrayscale">
    <property name="text">
@@ -671,6 +672,11 @@
   <action name="thOtsu">
    <property name="text">
     <string>Otsu</string>
+   </property>
+  </action>
+  <action name="sgContour">
+   <property name="text">
+    <string>Contour</string>
    </property>
   </action>
  </widget>
