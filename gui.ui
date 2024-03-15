@@ -353,11 +353,21 @@
     <addaction name="tampilanPopUp"/>
     <addaction name="tampilanScale"/>
    </widget>
+   <widget class="QMenu" name="mfMenu">
+    <property name="title">
+     <string>Morfologi</string>
+    </property>
+    <addaction name="mfDilasi"/>
+    <addaction name="mfErosi"/>
+    <addaction name="mfOpening"/>
+    <addaction name="mfClosing"/>
+   </widget>
    <addaction name="tampilanMenu"/>
    <addaction name="hgMenu"/>
    <addaction name="tfMenu"/>
    <addaction name="opMenu"/>
    <addaction name="kvMenu"/>
+   <addaction name="mfMenu"/>
   </widget>
   <action name="hgGrayscale">
    <property name="text">
@@ -510,6 +520,26 @@
    </property>
    <property name="text">
     <string>Auto Scale</string>
+   </property>
+  </action>
+  <action name="mfDilasi">
+   <property name="text">
+    <string>Dilasi</string>
+   </property>
+  </action>
+  <action name="mfErosi">
+   <property name="text">
+    <string>Erosi</string>
+   </property>
+  </action>
+  <action name="mfOpening">
+   <property name="text">
+    <string>Opening</string>
+   </property>
+  </action>
+  <action name="mfClosing">
+   <property name="text">
+    <string>Closing</string>
    </property>
   </action>
  </widget>

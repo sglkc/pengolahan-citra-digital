@@ -2,7 +2,7 @@ import atexit
 import os
 import shutil
 import sys
-from F1_F2 import F1_F2 as Aplikasi
+from G1 import G1 as Aplikasi
 from PyQt5.QtWidgets import QApplication
 
 # Hapus folder __pycache__ karena import modul
