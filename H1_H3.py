@@ -1,4 +1,4 @@
-from types import LambdaType
+import typing
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QAction, QDialog, QMenu
 import cv2
@@ -9,11 +9,15 @@ from G1 import G1
 class H1_H3(G1):
     def __init__(self):
         super(H1_H3, self).__init__()
-        self.ltMenu: QMenu
-        self.ltMenu.triggered.connect(self.ltTrigger)   # type: ignore
+
+        self.thMenu: QMenu
+        self.thLocal: QMenu
+        self.thAdaptive: QMenu
+
+        self.thLocal.triggered.connect(self.thLocalTrigger)   # type: ignore
 
     @pyqtSlot(QAction)
-    def ltTrigger(self, action: QAction):
+    def thLocalTrigger(self, action: QAction):
         if not hasattr(self, 'imageOriginal'):
             return self.showMessage('Error', 'Citra masih kosong!')
 
@@ -26,9 +30,8 @@ class H1_H3(G1):
             'To Zero Invert': cv2.THRESH_TOZERO_INV,
         }
 
-        self.localThres(mapped.get(menuText))        # type: ignore
+        fungsi = typing.cast(int, mapped.get(menuText))
 
-    def localThres(self, fungsi: int):
         # grayscalisasikan
 
         dialog = InputDialog([ ['Nilai Ambang', 50, 'slider'] ])

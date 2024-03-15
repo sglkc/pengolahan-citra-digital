@@ -322,7 +322,7 @@
    </widget>
    <widget class="QMenu" name="opMenu">
     <property name="title">
-     <string>Operasi Pixel</string>
+     <string>Op. Pixel</string>
     </property>
     <addaction name="opAdd"/>
     <addaction name="opSubtract"/>
@@ -392,15 +392,29 @@
     <addaction name="mfOpening"/>
     <addaction name="mfClosing"/>
    </widget>
-   <widget class="QMenu" name="ltMenu">
+   <widget class="QMenu" name="thMenu">
     <property name="title">
-     <string>Local Thres.</string>
+     <string>Thresholding</string>
     </property>
-    <addaction name="ltBinary"/>
-    <addaction name="ltBinaryInv"/>
-    <addaction name="ltTrunc"/>
-    <addaction name="ltToZero"/>
-    <addaction name="ltToZeroInv"/>
+    <widget class="QMenu" name="thLocal">
+     <property name="title">
+      <string>Local</string>
+     </property>
+     <addaction name="thBinary"/>
+     <addaction name="thBinaryInv"/>
+     <addaction name="thTrunc"/>
+     <addaction name="thToZero"/>
+     <addaction name="thToZeroInv"/>
+    </widget>
+    <widget class="QMenu" name="thAdaptive">
+     <property name="title">
+      <string>Adaptive</string>
+     </property>
+     <addaction name="thMean"/>
+     <addaction name="thGaussian"/>
+    </widget>
+    <addaction name="thLocal"/>
+    <addaction name="thAdaptive"/>
    </widget>
    <addaction name="tampilanMenu"/>
    <addaction name="hgMenu"/>
@@ -408,7 +422,7 @@
    <addaction name="opMenu"/>
    <addaction name="kvMenu"/>
    <addaction name="mfMenu"/>
-   <addaction name="ltMenu"/>
+   <addaction name="thMenu"/>
   </widget>
   <action name="hgGrayscale">
    <property name="text">
@@ -606,6 +620,51 @@
   <action name="ltToZeroInv">
    <property name="text">
     <string>To Zero Invert</string>
+   </property>
+  </action>
+  <action name="actionMean">
+   <property name="text">
+    <string>Mean</string>
+   </property>
+  </action>
+  <action name="actionGaussian">
+   <property name="text">
+    <string>Gaussian</string>
+   </property>
+  </action>
+  <action name="thBinary">
+   <property name="text">
+    <string>Binary</string>
+   </property>
+  </action>
+  <action name="thBinaryInv">
+   <property name="text">
+    <string>Binary Invert</string>
+   </property>
+  </action>
+  <action name="thTrunc">
+   <property name="text">
+    <string>Trunc</string>
+   </property>
+  </action>
+  <action name="thToZero">
+   <property name="text">
+    <string>To Zero</string>
+   </property>
+  </action>
+  <action name="thToZeroInv">
+   <property name="text">
+    <string>To Zero Invert</string>
+   </property>
+  </action>
+  <action name="thMean">
+   <property name="text">
+    <string>Mean</string>
+   </property>
+  </action>
+  <action name="thGaussian">
+   <property name="text">
+    <string>Gaussian</string>
    </property>
   </action>
  </widget>

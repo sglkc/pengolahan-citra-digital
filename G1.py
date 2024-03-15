@@ -1,4 +1,5 @@
 from types import LambdaType
+import typing
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QAction, QMenu
 import cv2
@@ -24,9 +25,8 @@ class G1(F1_F2):
             'Closing': lambda i, k: cv2.morphologyEx(i, cv2.MORPH_CLOSE, k)
         }
 
-        self.morfologi(mapped.get(menuText))        # type: ignore
+        fungsi = typing.cast(LambdaType, mapped.get(menuText))
 
-    def morfologi(self, fungsi: LambdaType):
         # grayscalisasikan
         # binerisasi
 
