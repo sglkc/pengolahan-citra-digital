@@ -396,9 +396,9 @@
     <property name="title">
      <string>Thresholding</string>
     </property>
-    <widget class="QMenu" name="thLocal">
+    <widget class="QMenu" name="thGlobal">
      <property name="title">
-      <string>Local</string>
+      <string>Global</string>
      </property>
      <addaction name="thBinary"/>
      <addaction name="thBinaryInv"/>
@@ -406,15 +406,16 @@
      <addaction name="thToZero"/>
      <addaction name="thToZeroInv"/>
     </widget>
-    <widget class="QMenu" name="thAdaptive">
+    <widget class="QMenu" name="thLocalAdapt">
      <property name="title">
-      <string>Adaptive</string>
+      <string>Local/Adaptive</string>
      </property>
      <addaction name="thMean"/>
      <addaction name="thGaussian"/>
+     <addaction name="thOtsu"/>
     </widget>
-    <addaction name="thLocal"/>
-    <addaction name="thAdaptive"/>
+    <addaction name="thGlobal"/>
+    <addaction name="thLocalAdapt"/>
    </widget>
    <addaction name="tampilanMenu"/>
    <addaction name="hgMenu"/>
@@ -665,6 +666,11 @@
   <action name="thGaussian">
    <property name="text">
     <string>Gaussian</string>
+   </property>
+  </action>
+  <action name="thOtsu">
+   <property name="text">
+    <string>Otsu</string>
    </property>
   </action>
  </widget>

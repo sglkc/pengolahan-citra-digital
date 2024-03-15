@@ -11,14 +11,14 @@ class H1_H3(G1):
         super(H1_H3, self).__init__()
 
         self.thMenu: QMenu
-        self.thLocal: QMenu
-        self.thAdaptive: QMenu
+        self.thGlobal: QMenu
+        self.thLocalAdapt: QMenu
 
-        self.thLocal.triggered.connect(self.thLocalTrigger)   # type: ignore
-        self.thAdaptive.triggered.connect(self.thAdaptiveTrigger)   # type: ignore
+        self.thGlobal.triggered.connect(self.thGlobalTrigger)   # type: ignore
+        self.thLocalAdapt.triggered.connect(self.thLocalAdaptTrigger)   # type: ignore
 
     @pyqtSlot(QAction)
-    def thLocalTrigger(self, action: QAction):
+    def thGlobalTrigger(self, action: QAction):
         if not hasattr(self, 'imageOriginal'):
             return self.showMessage('Error', 'Citra masih kosong!')
 
@@ -44,7 +44,7 @@ class H1_H3(G1):
         self.displayImage(2)
 
     @pyqtSlot(QAction)
-    def thAdaptiveTrigger(self, action: QAction):
+    def thLocalAdaptTrigger(self, action: QAction):
         if not hasattr(self, 'imageOriginal'):
             return self.showMessage('Error', 'Citra masih kosong!')
 
@@ -52,11 +52,16 @@ class H1_H3(G1):
         mapped = {
             'Mean': cv2.ADAPTIVE_THRESH_MEAN_C,
             'Gaussian': cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+            'Otsu': False
         }
 
         fungsi = typing.cast(int, mapped.get(menuText))
         image = cv2.cvtColor(self.imageOriginal, cv2.COLOR_BGR2GRAY)
-        image = cv2.adaptiveThreshold(image, 255, fungsi, cv2.THRESH_BINARY, 3, 2)
+
+        if menuText == 'Otsu':
+            _, image = cv2.threshold(image, 127, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        else:
+            image = cv2.adaptiveThreshold(image, 255, fungsi, cv2.THRESH_BINARY, 3, 2)
 
         self.imageResult = image
         self.displayImage(2)
