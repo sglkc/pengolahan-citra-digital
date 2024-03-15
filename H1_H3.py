@@ -15,6 +15,7 @@ class H1_H3(G1):
         self.thAdaptive: QMenu
 
         self.thLocal.triggered.connect(self.thLocalTrigger)   # type: ignore
+        self.thAdaptive.triggered.connect(self.thAdaptiveTrigger)   # type: ignore
 
     @pyqtSlot(QAction)
     def thLocalTrigger(self, action: QAction):
@@ -31,15 +32,31 @@ class H1_H3(G1):
         }
 
         fungsi = typing.cast(int, mapped.get(menuText))
-
-        # grayscalisasikan
-
         dialog = InputDialog([ ['Nilai Ambang', 50, 'slider'] ])
 
         if dialog.exec() == QDialog.Rejected: return
 
         thres = dialog.getValues(lambda val: int(val) * 2.55)[0]
+        # grayscalisasikan
         _, image = cv2.threshold(self.imageOriginal, thres, 255, fungsi)
+
+        self.imageResult = image
+        self.displayImage(2)
+
+    @pyqtSlot(QAction)
+    def thAdaptiveTrigger(self, action: QAction):
+        if not hasattr(self, 'imageOriginal'):
+            return self.showMessage('Error', 'Citra masih kosong!')
+
+        menuText = action.text()
+        mapped = {
+            'Mean': cv2.ADAPTIVE_THRESH_MEAN_C,
+            'Gaussian': cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+        }
+
+        fungsi = typing.cast(int, mapped.get(menuText))
+        image = cv2.cvtColor(self.imageOriginal, cv2.COLOR_BGR2GRAY)
+        image = cv2.adaptiveThreshold(image, 255, fungsi, cv2.THRESH_BINARY, 3, 2)
 
         self.imageResult = image
         self.displayImage(2)
