@@ -73,9 +73,54 @@ class H1_H3(G1):
         image = cv2.cvtColor(self.imageOriginal, cv2.COLOR_BGR2GRAY)
         _, image = cv2.threshold(image, 127, 255, cv2.THRESH_BINARY)
         contours, _ = cv2.findContours(image, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
-
         image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
-        image = cv2.drawContours(image, contours, -1, (255, 0, 0), 2)
+
+        polygons = []
+
+        opts = {
+            'fontFace': cv2.FONT_HERSHEY_DUPLEX,
+            'fontScale': 0.75,
+            'color': (0, 75, 255),
+        }
+
+        putText = lambda text, coords: cv2.putText(image, text, coords, **opts)
+
+        for contour in contours:
+            epsilon = 0.02 * cv2.arcLength(contour, True)
+            polygon = cv2.approxPolyDP(contour, epsilon, False)
+            polygons.append(polygon)
+
+            epsilon = 0.01 * cv2.arcLength(contour, True)
+            polygon = cv2.approxPolyDP(contour, epsilon, True)
+
+            x, y, w, h = cv2.boundingRect(polygon)
+            coords = int(x + (w / 2)), int(y + (h / 2))
+
+            if len(polygon) == 3:
+                putText('Segitiga', coords)
+            elif len(polygon) == 4:
+                aspect_ratio = float(w) / h
+                if 0.95 <= aspect_ratio <= 1.05:
+                    putText('Persegi', coords)
+                else:
+                    putText('Persegi Panjang', coords)
+            elif len(polygon) == 5:
+                putText('Pentagon', coords)
+            elif len(polygon) == 6:
+                putText('Heksagon', coords)
+            elif len(polygon) == 7:
+                putText('Heptagon', coords)
+            elif len(polygon) == 8:
+                putText('Oktagon', coords)
+            elif len(polygon) == 9:
+                putText('Nonagon', coords)
+            elif len(polygon) == 10:
+                putText('Bintang', coords)
+            else:
+                putText('Lingkaran', coords)
+
+        for contour in polygons:
+            cv2.drawContours(image, [contour], -1, (0, 127, 255), 2)
 
         self.imageResult = image
         self.displayImage(2)
