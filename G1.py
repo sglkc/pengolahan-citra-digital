@@ -30,6 +30,7 @@ class G1(F1_F2):
         # grayscalisasikan
         # binerisasi
 
+        # strel (kernel) bisa diubah bentuk dan besarnya
         kernel = cv2.getStructuringElement(cv2.MORPH_CROSS, (5, 5))
         image = fungsi(self.imageOriginal, kernel)
 
