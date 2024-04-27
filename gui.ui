@@ -418,6 +418,13 @@
     <addaction name="sgLocalAdaptThres"/>
     <addaction name="sgContour"/>
    </widget>
+   <widget class="QMenu" name="pwMenu">
+    <property name="title">
+     <string>Warna</string>
+    </property>
+    <addaction name="pwTracking"/>
+    <addaction name="pwPicker"/>
+   </widget>
    <addaction name="tampilanMenu"/>
    <addaction name="hgMenu"/>
    <addaction name="tfMenu"/>
@@ -425,6 +432,7 @@
    <addaction name="kvMenu"/>
    <addaction name="mfMenu"/>
    <addaction name="sgMenu"/>
+   <addaction name="pwMenu"/>
   </widget>
   <action name="hgGrayscale">
    <property name="text">
@@ -677,6 +685,16 @@
   <action name="sgContour">
    <property name="text">
     <string>Contour</string>
+   </property>
+  </action>
+  <action name="pwTracking">
+   <property name="text">
+    <string>Color Tracking</string>
+   </property>
+  </action>
+  <action name="pwPicker">
+   <property name="text">
+    <string>Color Picker</string>
    </property>
   </action>
  </widget>
