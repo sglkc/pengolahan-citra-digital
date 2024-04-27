@@ -43,8 +43,8 @@ class I1_I2(G1):
 
             if cv2.waitKey(1) == 27: break
 
-            cam.release()
-            cv2.destroyAllWindows()
+        cam.release()
+        cv2.destroyAllWindows()
 
     def __picker(self):
         def nothing(_): pass
@@ -81,8 +81,8 @@ class I1_I2(G1):
 
             if cv2.waitKey(1) == 27: break
 
-            cam.release()
-            cv2.destroyAllWindows()
+        cam.release()
+        cv2.destroyAllWindows()
 
 if __name__ == '__main__':
     __import__('aplikasi').main()
