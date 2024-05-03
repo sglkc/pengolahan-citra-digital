@@ -3,9 +3,9 @@ from PyQt5.QtWidgets import QAction, QMenu
 import cv2
 import numpy as np
 
-from G1 import G1
+from H1_H3 import H1_H3
 
-class I1_I2(G1):
+class I1_I2(H1_H3):
     def __init__(self):
         super(I1_I2, self).__init__()
 
