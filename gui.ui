@@ -425,6 +425,15 @@
     <addaction name="pwTracking"/>
     <addaction name="pwPicker"/>
    </widget>
+   <widget class="QMenu" name="detMenu">
+    <property name="title">
+     <string>Detection</string>
+    </property>
+    <addaction name="detPedestrian"/>
+    <addaction name="detAstronot"/>
+    <addaction name="detCars"/>
+    <addaction name="detFace"/>
+   </widget>
    <addaction name="tampilanMenu"/>
    <addaction name="hgMenu"/>
    <addaction name="tfMenu"/>
@@ -433,6 +442,7 @@
    <addaction name="mfMenu"/>
    <addaction name="sgMenu"/>
    <addaction name="pwMenu"/>
+   <addaction name="detMenu"/>
   </widget>
   <action name="hgGrayscale">
    <property name="text">
@@ -695,6 +705,26 @@
   <action name="pwPicker">
    <property name="text">
     <string>Color Picker</string>
+   </property>
+  </action>
+  <action name="detAstronot">
+   <property name="text">
+    <string>HoG Astronot</string>
+   </property>
+  </action>
+  <action name="detCars">
+   <property name="text">
+    <string>Cars Detection</string>
+   </property>
+  </action>
+  <action name="detPedestrian">
+   <property name="text">
+    <string>HoG Pejalan Kaki</string>
+   </property>
+  </action>
+  <action name="detFace">
+   <property name="text">
+    <string>HAAR Face Detection</string>
    </property>
   </action>
  </widget>
