@@ -36,8 +36,8 @@ class I3_I5(I1_I2):
 
     @pyqtSlot()
     def __detection(self):
-        cam = cv2.VideoCapture("cars.mp4")
-        car_cascade = cv2.CascadeClassifier("cars.xml")
+        cam = cv2.VideoCapture("detection/mobil.mp4")
+        car_cascade = cv2.CascadeClassifier("detection/haarcascade_car.xml")
 
         while True:
             _, frame = cam.read()
@@ -49,18 +49,18 @@ class I3_I5(I1_I2):
 
             cv2.imshow('video', frame)
 
-            if cv2.waitKey(10) & 0xFF == ord('q'):
+            if cv2.waitKey(27) & 0xFF == ord('q'):
                 break
 
-            cam.release()
-            cv2.destroyAllWindows()
+        cam.release()
+        cv2.destroyAllWindows()
 
     @pyqtSlot()
     def __hog(self):
         image = data.astronaut()
         _, hog_image = hog(image, orientations=8, pixels_per_cell=(16, 16),
                     cells_per_block=(1, 1), visualize=True,
-                    multichannel=True)
+                    channel_axis=-1)
         _, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6), sharex=True,
                                        sharey=True)
         ax1.axis('off')
@@ -77,7 +77,7 @@ class I3_I5(I1_I2):
     def __hogCustom(self):
         hog = cv2.HOGDescriptor()
         hog.setSVMDetector(hog.getDefaultPeopleDetector()) # type: ignore
-        img = cv2.imread("pedestrian.png")
+        img = cv2.imread("detection/pedestrian.jpeg")
         img = imutils.resize(img, width=min(400, img.shape[0]))
 
         (regions, _) = hog.detectMultiScale(img, winStride=(4,4), padding=(4,4), scale=1.05)
@@ -90,18 +90,18 @@ class I3_I5(I1_I2):
 
     @pyqtSlot()
     def __haar(self):
-        face_classifier = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-        image = cv2.imread("face.png")
+        face_classifier = cv2.CascadeClassifier('detection/haarcascade_frontalface_default.xml')
+        image = cv2.imread("detection/face.jpeg")
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         faces = face_classifier.detectMultiScale(gray, 1.3, 5)
 
-        if faces == ():
+        if faces.size == 0:
             print("No faces found")
-
-        for (x, y, w, h) in faces:
-            cv2.rectangle(image, (x, y), (x + w, y + h), (127, 0, 255), 2)
-            cv2.imshow("Face Detection", image)
-            cv2.waitKey(0)
+        else:
+            for (x, y, w, h) in faces:
+                cv2.rectangle(image, (x, y), (x + w, y + h), (127, 0, 255), 2)
+                cv2.imshow("Face Detection", image)
+                cv2.waitKey(0)
 
         cv2.destroyAllWindows()
 
