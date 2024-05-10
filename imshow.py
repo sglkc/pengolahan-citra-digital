@@ -11,7 +11,10 @@ def cv2_imshow(winname: str, mat: MatLike):
             os.path.dirname(os.path.abspath(cv2.__file__)), "qt", "plugins"
         )
 
+    cv2.namedWindow(winname, cv2.WINDOW_NORMAL)
     cv2.imshow(winname, mat)
 
     if sys.platform.startswith("linux"):
-        os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = QtCore.QLibraryInfo.location(QtCore.QLibraryInfo.PluginsPath)
+        os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = QtCore.QLibraryInfo.location(
+            QtCore.QLibraryInfo.PluginsPath
+        )

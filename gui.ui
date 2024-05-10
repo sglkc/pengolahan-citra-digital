@@ -433,6 +433,7 @@
     <addaction name="detAstronot"/>
     <addaction name="detCars"/>
     <addaction name="detFace"/>
+    <addaction name="separator"/>
     <addaction name="detLandmark"/>
     <addaction name="detSwap"/>
     <addaction name="detSwapLive"/>

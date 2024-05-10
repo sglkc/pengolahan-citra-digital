@@ -35,8 +35,14 @@ class I3_I7(I1_I2):
             'Hough Circle Transform': self.__houghCircle,
         }
 
-        mapped.get(value)() # type: ignore
-        return True
+        try:
+            mapped.get(value)()      # type: ignore
+            return True
+        except Exception as error:
+            if isinstance(error, TypeError):
+                return False
+
+            raise error
 
     @pyqtSlot()
     def __detection(self):
