@@ -1,9 +1,10 @@
-import atexit
 import os
-import shutil
 import sys
-from I3_I7 import I3_I7 as Aplikasi
+import atexit
+import shutil
+from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication
+from I8_I11 import I8_I11 as Aplikasi
 
 # Hapus folder __pycache__ karena import modul
 def remove_pycache():
@@ -15,6 +16,9 @@ def remove_pycache():
 
 # Jalankan aplikasi
 def main():
+    if sys.platform.startswith("linux"):
+        os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = QtCore.QLibraryInfo.location(QtCore.QLibraryInfo.PluginsPath)
+
     atexit.register(remove_pycache)
     app = QApplication(sys.argv)
     window = Aplikasi()

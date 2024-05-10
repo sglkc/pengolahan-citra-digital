@@ -6,6 +6,7 @@ from skimage.feature import hog
 import matplotlib.pyplot as plt
 import imutils
 import numpy as np
+from imshow import cv2_imshow
 
 from I1_I2 import I1_I2
 
@@ -50,7 +51,7 @@ class I3_I7(I1_I2):
             for (x, y, w, h) in cars:
                 cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 1)
 
-            cv2.imshow('video', frame)
+            cv2_imshow('video', frame)
 
             if cv2.waitKey(1) == 27:
                 break
@@ -88,7 +89,7 @@ class I3_I7(I1_I2):
         for (x,y,w,h) in regions:
             cv2.rectangle(img, (x, y), (x+w, y+h), (0, 0, 255), 2)
 
-        cv2.imshow("image", img)
+        cv2_imshow("image", img)
         cv2.waitKey()
 
     @pyqtSlot()
@@ -103,7 +104,7 @@ class I3_I7(I1_I2):
         else:
             for (x, y, w, h) in faces:
                 cv2.rectangle(image, (x, y), (x + w, y + h), (127, 0, 255), 2)
-                cv2.imshow("Face Detection", image)
+                cv2_imshow("Face Detection", image)
                 cv2.waitKey(0)
 
         cv2.destroyAllWindows()
@@ -121,7 +122,7 @@ class I3_I7(I1_I2):
             bodies = body_classifier.detectMultiScale(gray, 1.2, 3)
             for (x, y, w, h) in bodies:
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 255), 2)
-                cv2.imshow('Pedestrians', frame)
+                cv2_imshow('Pedestrians', frame)
                 if cv2.waitKey(1) == 27:
                     break
 
@@ -142,7 +143,7 @@ class I3_I7(I1_I2):
             cv2.circle(cimg,(i[0],i[1]),i[2],(0,255,0),2)
             cv2.circle(cimg,(i[0],i[1]),2,(0,0,255),3)
 
-        cv2.imshow('detected circles',cimg)
+        cv2_imshow('detected circles',cimg)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 

@@ -2,6 +2,7 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QAction, QMenu
 import cv2
 import numpy as np
+from imshow import cv2_imshow
 
 from H1_H3 import H1_H3
 
@@ -37,9 +38,9 @@ class I1_I2(H1_H3):
             mask = cv2.inRange(hsv, lower_color, upper_color)
             result = cv2.bitwise_and(frame, frame, mask=mask)
 
-            cv2.imshow("frame", frame)
-            cv2.imshow("mask", mask)
-            cv2.imshow("result", result)
+            cv2_imshow("frame", frame)
+            cv2_imshow("mask", mask)
+            cv2_imshow("result", result)
 
             if cv2.waitKey(1) == 27: break
 
@@ -75,9 +76,9 @@ class I1_I2(H1_H3):
             mask = cv2.inRange(hsv, lower_color, upper_color)
             result = cv2.bitwise_and(frame, frame, mask=mask)
 
-            cv2.imshow("frame", frame)
-            cv2.imshow("mask", mask)
-            cv2.imshow("result", result)
+            cv2_imshow("frame", frame)
+            cv2_imshow("mask", mask)
+            cv2_imshow("result", result)
 
             if cv2.waitKey(1) == 27: break
 

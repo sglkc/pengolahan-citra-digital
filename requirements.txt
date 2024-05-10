@@ -1,7 +1,7 @@
 matplotlib==3.8.0
 numpy==1.21.5
-opencv_contrib_python==4.9.0.80
-PyQt5==5.15.10
-PyQt5_sip==12.13.0
+opencv-python==4.9.0.80
+pyqt5==5.15.10
 scikit-image==0.23.2
 imutils==0.5.4
+dlib==19.24.99

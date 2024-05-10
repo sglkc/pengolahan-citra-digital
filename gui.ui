@@ -433,6 +433,10 @@
     <addaction name="detAstronot"/>
     <addaction name="detCars"/>
     <addaction name="detFace"/>
+    <addaction name="detLandmark"/>
+    <addaction name="detSwap"/>
+    <addaction name="detSwapLive"/>
+    <addaction name="detYawn"/>
    </widget>
    <addaction name="tampilanMenu"/>
    <addaction name="hgMenu"/>
@@ -725,6 +729,26 @@
   <action name="detFace">
    <property name="text">
     <string>HAAR Face Detection</string>
+   </property>
+  </action>
+  <action name="detLandmark">
+   <property name="text">
+    <string>Facial Landmark</string>
+   </property>
+  </action>
+  <action name="detSwap">
+   <property name="text">
+    <string>Face Swap</string>
+   </property>
+  </action>
+  <action name="detYawn">
+   <property name="text">
+    <string>Face Yawn</string>
+   </property>
+  </action>
+  <action name="detSwapLive">
+   <property name="text">
+    <string>Face Swap Live</string>
    </property>
   </action>
  </widget>
