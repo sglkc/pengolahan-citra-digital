@@ -10,9 +10,6 @@ from imshow import cv2_imshow
 
 from I3_I7 import I3_I7
 
-class TooManyFaces(Exception): pass
-class NoFaces(Exception): pass
-
 class I8_I11(I3_I7):
     def __init__(self):
         super(I8_I11, self).__init__()
@@ -37,10 +34,10 @@ class I8_I11(I3_I7):
                 self.RIGHT_BROW_POINTS,
             self.NOSE_POINTS + self.MOUTH_POINTS,
         ]
-        self.predictor = dlib.shape_predictor(self.PREDICTOR_PATH)
-        self.detector = dlib.get_frontal_face_detector()
         self.CASCADE_PATH = './detection/haarcascade_frontalface_default.xml'
         self.cascade = cv2.CascadeClassifier(self.CASCADE_PATH)
+        self.predictor = dlib.shape_predictor(self.PREDICTOR_PATH)
+        self.detector = dlib.get_frontal_face_detector()
         self.detLandmark: QAction
         self.detSwap: QAction
         self.detSwapLive: QAction
@@ -65,8 +62,7 @@ class I8_I11(I3_I7):
         if dlibOn:
             rects = self.detector(image, 1)
 
-            if len(rects) > 1: return "error"
-            if len(rects) == 0: return "error"
+            if len(rects) == 0 or len(rects) > 1: return "error"
 
             return np.matrix(
                 [[p.x, p.y] for p in self.predictor(image, rects[0]).parts()]
@@ -74,8 +70,7 @@ class I8_I11(I3_I7):
         else:
             rects = self.cascade.detectMultiScale(image, 1.3, 5)
 
-            if len(rects) > 1: return "error"
-            if len(rects) == 0: return "error"
+            if len(rects) == 0 or len(rects) > 1: return "error"
 
             x, y, w, h = rects[0]
             rect = dlib.rectangle(x, y, x + w, y + h)
@@ -104,7 +99,6 @@ class I8_I11(I3_I7):
 
         for group in self.OVERLAY_POINTS:
             self.draw_convex_hull(image, landmarks[group], color=1)
-
 
         ksize = (self.FEATHER_AMOUNT, self.FEATHER_AMOUNT)
         image = np.array([image, image, image]).transpose((1, 2, 0))
@@ -139,7 +133,7 @@ class I8_I11(I3_I7):
 
         s = self.get_landmarks(im, dlibOn)
 
-        if s == "error": return "error"
+        if isinstance(s, str) and s == "error": return "error"
 
         return im, s
 
@@ -170,9 +164,7 @@ class I8_I11(I3_I7):
         get_im_lm1 = self.read_im_and_landmarks(image1, dlibOn)
         get_im_lm2 = self.read_im_and_landmarks(image2, dlibOn)
 
-        if get_im_lm1 == "error" or get_im_lm2 == "error":
-            print("Error tidak ada atau terlalu banyak muka")
-            return image1
+        if get_im_lm1 == "error" or get_im_lm2 == "error": return image1
 
         im1, landmarks1 = get_im_lm1
         im2, landmarks2 = get_im_lm2
@@ -210,10 +202,11 @@ class I8_I11(I3_I7):
         file, _ = QFileDialog().getOpenFileName(
             filter='Citra (*.png *.jpeg *.jpg *.bmp)')
 
+        dlibOn = False
         image1 = self.imageOriginal
         image2 = cv2.imread(file)
-        swap1 = self.swappy(image1, image2)
-        swap2 = self.swappy(image2, image1)
+        swap1 = self.swappy(image1, image2, dlibOn)
+        swap2 = self.swappy(image2, image1, dlibOn)
 
         cv2_imshow('1', swap1)
         cv2_imshow('2', swap2)
@@ -221,12 +214,12 @@ class I8_I11(I3_I7):
         cv2.destroyAllWindows()
 
     def __faceSwapLive(self):
-        file, _ = QFileDialog().getOpenFileName(
-            filter='Citra (*.png *.jpeg *.jpg *.bmp)')
+        if not hasattr(self, 'imageOriginal'):
+            return self.showMessage('Error', 'Citra masih kosong!')
 
         capture = cv2.VideoCapture(0)
-        filter_image = cv2.imread(file)
-        dlibOn = True
+        filter_image = self.imageOriginal
+        dlibOn = False
 
         while True:
             _, frame = capture.read()
@@ -243,7 +236,7 @@ class I8_I11(I3_I7):
 
     def __faceYawn(self):
         capture = cv2.VideoCapture(0)
-        dlibOn = True
+        dlibOn = False
 
         def top_lip(landmarks):
             top_lip_pts = []
@@ -268,7 +261,7 @@ class I8_I11(I3_I7):
         def mouth_open(image):
             landmarks = self.get_landmarks(image, dlibOn)
 
-            if landmarks == "error": return image, 0
+            if isinstance(landmarks, str) and landmarks == "error": return image, 0
 
             image_with_landmarks = self.annotate_landmarks(image, landmarks)
             top_lip_center = top_lip(landmarks)
@@ -288,9 +281,7 @@ class I8_I11(I3_I7):
 
             if lip_distance > 25:
                 yawn_status = True
-                cv2.putText(frame, "Subjek sedang menguap", (50, 450),
-                            cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2)
-                cv2.putText(frame, "Count:" + str(yawns + 1), (50, 450),
+                cv2.putText(landmarks, "Subjek sedang menguap", (50, 450),
                             cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2)
             else:
                 yawn_status = False
@@ -298,11 +289,52 @@ class I8_I11(I3_I7):
             if prev_yawn_status and not yawn_status:
                 yawns += 1
 
-            cv2_imshow('Landmarks', landmarks)
-            cv2_imshow('Face Swap Live', frame)
+            cv2.putText(landmarks, "Count:" + str(yawns + 1), (50, 50),
+                        cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 255), 2)
+
+            cv2_imshow('Yawn Detectoor', landmarks)
 
             if cv2.waitKey(1) == ord('q'):
                 break
+
+        capture.release()
+        cv2.destroyAllWindows()
+
+    def __faceHatLive(self):
+        if not hasattr(self, 'imageOriginal'):
+            return self.showMessage('Error', 'Citra masih kosong!')
+
+        capture = cv2.VideoCapture(0)
+        filter_image = self.imageOriginal
+        dlibOn = False
+
+        while True:
+            _, frame = capture.read()
+            frame = cv2.flip(frame, 1)
+            mask = self.read_im_and_landmarks(frame, dlibOn)
+
+            if isinstance(mask, str) and mask == "error":
+                cv2_imshow('Topi saya', frame)
+                print("Tidak terdetek")
+                if cv2.waitKey(1) == ord('q'): break
+                continue
+
+            frame, mask = mask
+            hat_h, hat_w = filter_image.shape[:2]
+            mask_h, mask_w = mask.shape[:2]
+            scale = min(mask_w / hat_w, mask_h / hat_h)
+            hat = cv2.resize(filter_image, None, fx=scale, fy=scale,
+                             interpolation=cv2.INTER_LINEAR)
+            top_left_x = int((mask_w - hat.shape[1]) / 2)
+            top_left_y = 0
+
+            result = frame.copy()
+            result[top_left_y:top_left_y + hat.shape[0],
+                   top_left_x:top_left_x + hat.shape[1]] = hat
+
+            cv2_imshow('Topi saya', result)
+
+            if cv2.waitKey(1) == ord('q'): break
 
         capture.release()
         cv2.destroyAllWindows()

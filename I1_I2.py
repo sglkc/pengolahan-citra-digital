@@ -2,7 +2,7 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QAction, QMenu
 import cv2
 import numpy as np
-from imshow import cv2_imshow
+from imshow import cv2_imshow, cv2_createTrackbar
 
 from H1_H3 import H1_H3
 
@@ -48,17 +48,15 @@ class I1_I2(H1_H3):
         cv2.destroyAllWindows()
 
     def __picker(self):
-        def nothing(_): pass
-
         cam = cv2.VideoCapture(0)
 
         cv2.namedWindow("Trackbars")
-        cv2.createTrackbar("L - H", "Trackbars", 0, 179, nothing)
-        cv2.createTrackbar("L - S", "Trackbars", 0, 255, nothing)
-        cv2.createTrackbar("L - V", "Trackbars", 0, 255, nothing)
-        cv2.createTrackbar("U - H", "Trackbars", 179, 179, nothing)
-        cv2.createTrackbar("U - S", "Trackbars", 255, 255, nothing)
-        cv2.createTrackbar("U - V", "Trackbars", 255, 255, nothing)
+        cv2_createTrackbar("L - H", "Trackbars", 0, 179)
+        cv2_createTrackbar("L - S", "Trackbars", 0, 255)
+        cv2_createTrackbar("L - V", "Trackbars", 0, 255)
+        cv2_createTrackbar("U - H", "Trackbars", 179, 179)
+        cv2_createTrackbar("U - S", "Trackbars", 255, 255)
+        cv2_createTrackbar("U - V", "Trackbars", 255, 255)
 
         while True:
             _, frame = cam.read()
